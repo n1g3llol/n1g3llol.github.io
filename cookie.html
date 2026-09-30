@@ -59,13 +59,13 @@
 
         /* 3-Column Layout */
         .left-panel {
-            flex: 1;
+            flex: 1.2;
             background: radial-gradient(circle, #2575fc 0%, #1a252f 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            padding-top: 20px;
+            justify-content: center; /* Centers everything vertically */
+            padding: 20px;
             border-right: 4px solid #444;
             position: relative;
         }
@@ -86,48 +86,61 @@
             overflow-y: auto;
         }
 
-        /* Left Side: Cookie Zone */
+        /* Left Column Content (Centered & Enlarged) */
+        .left-header-area {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         .bakery-title {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: bold;
             text-shadow: 2px 2px black;
             margin-bottom: 5px;
         }
 
         .score-display {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: bold;
             text-shadow: 2px 2px black;
         }
 
         .cps-display {
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: #ccc;
             text-shadow: 1px 1px black;
-            margin-bottom: 20px;
         }
 
         .cookie-wrapper {
             position: relative;
-            width: 250px;
-            height: 250px;
+            width: 320px; /* Bigger layout wrapper box */
+            height: 320px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .cookie {
-            font-size: 160px;
+        .cookie-img-btn {
+            width: 260px; /* Expanded cookie graphic size dimensions */
+            height: 260px;
             cursor: pointer;
             transition: transform 0.05s ease;
             z-index: 10;
+            background-image: url('cookie-pic.png'); /* Linked your uploaded image filename */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none;
+            background-color: transparent;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .shake { animation: cookieShake 0.12s ease-in-out; }
         @keyframes cookieShake {
             0% { transform: scale(0.95); }
             50% { transform: scale(1.05); }
-            100% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         .visual-cursor {
@@ -137,7 +150,7 @@
             z-index: 5;
         }
 
-        /* Center Side: News & Status Display */
+        /* Center Panel Content: Worker visual production lanes */
         .news-ticker {
             background: #111;
             border-bottom: 2px solid #444;
@@ -148,19 +161,41 @@
             font-style: italic;
         }
 
-        .center-content {
-            padding: 20px;
+        .visual-lanes-container {
+            padding: 15px;
             overflow-y: auto;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-            font-size: 1.1rem;
+            gap: 10px;
         }
 
-        /* Right Side: Store Panel */
+        .lane-row {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lane-label {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .lane-visuals {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-size: 1.6rem;
+        }
+
+        /* Right Panel: Advanced Tooltip Descriptions & Layout Store Styles */
         .store-header {
             background: #111;
             padding: 10px;
@@ -172,16 +207,21 @@
 
         .upgrades-row {
             display: flex;
-            gap: 5px;
+            gap: 10px;
             padding: 10px;
             background: rgba(0,0,0,0.3);
             border-bottom: 2px solid #444;
             overflow-x: auto;
         }
 
+        /* Explanatory descriptions show up perfectly natively on mouse hover */
+        .upgrade-icon-btn, .shop-item {
+            position: relative;
+        }
+
         .upgrade-icon-btn {
-            width: 50px;
-            height: 50px;
+            width: 52px;
+            height: 52px;
             background: #e67e22;
             border: 2px solid #fff;
             border-radius: 8px;
@@ -191,48 +231,37 @@
             align-items: center;
             justify-content: center;
         }
-        .upgrade-icon-btn:disabled {
-            background: #555;
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
+        .upgrade-icon-btn:disabled { background: #555; opacity: 0.4; cursor: not-allowed; }
 
-        .shop-list {
-            display: flex;
-            flex-direction: column;
-        }
+        .shop-list { display: flex; flex-direction: column; }
 
         .shop-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
+            padding: 12px 15px;
             border-bottom: 1px solid #444;
             background-size: cover;
             background-position: center;
-            position: relative;
-            min-height: 60px;
+            min-height: 65px;
         }
         .shop-item::before {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.75);
+            z-index: 1;
         }
 
-        .item-info {
-            position: relative;
-            z-index: 2;
-            text-align: left;
-        }
-        .item-info h4 { margin: 0; font-size: 1rem; }
-        .item-info p { margin: 2px 0 0 0; font-size: 0.75rem; color: #aaa; }
+        .item-info { position: relative; z-index: 2; text-align: left; }
+        .item-info h4 { margin: 0; font-size: 1.05rem; }
+        .item-info p { margin: 2px 0 0 0; font-size: 0.8rem; color: #bbb; }
 
         .buy-btn {
             background: #e67e22;
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 8px 14px;
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
@@ -241,15 +270,38 @@
         }
         .buy-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
 
-        /* General Animations */
-        .floating-text {
+        /* Custom Hover Tooltips Box Configurations */
+        .tooltip-text {
+            visibility: hidden;
             position: absolute;
-            color: #f1c40f;
-            font-size: 1.6rem;
-            font-weight: bold;
+            z-index: 500;
+            width: 220px;
+            background-color: #222;
+            color: #fff;
+            text-align: left;
+            border: 2px solid #e67e22;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 0.85rem;
+            box-shadow: 0px 5px 15px rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.15s ease;
             pointer-events: none;
-            animation: floatUp 0.6s ease-out forwards;
-            z-index: 20;
+        }
+
+        /* Tooltip Positions based on row panels placement */
+        .upgrades-row .tooltip-text { top: 60px; left: 0; }
+        .shop-item .tooltip-text { right: 105%; top: 5px; }
+
+        /* Show tooltip descriptive boxes cleanly upon cursor mouse enter hovers */
+        .upgrade-icon-btn:hover .tooltip-text, .shop-item:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .floating-text {
+            position: absolute; color: #f1c40f; font-size: 1.8rem; font-weight: bold;
+            pointer-events: none; animation: floatUp 0.6s ease-out forwards; z-index: 20;
         }
         @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-80px); } }
 
@@ -260,23 +312,14 @@
         @keyframes burst { 0% { opacity: 1; } 100% { transform: translate(var(--x), var(--y)); opacity: 0; } }
 
         .nav-back {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(0,0,0,0.5);
-            color: white;
-            text-decoration: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            z-index: 100;
+            position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.5);
+            color: white; text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; z-index: 100;
         }
     </style>
 </head>
 <body>
 
-    <!-- Login Overlay -->
-    <div id="login-overlay">
+        <div id="login-overlay">
         <div class="login-box">
             <h2>Enter Your Name</h2>
             <p>Welcome to the bakery simulation!</p>
@@ -286,40 +329,68 @@
         </div>
     </div>
 
-    <!-- LEFT PANEL: Cookie Clicking Zone -->
     <div class="left-panel">
-        <div class="bakery-title"><span id="bakery-name">Nigel</span>'s Bakery</div>
-        <div class="score-display"><span id="score">0</span> cookies</div>
-        <div class="cps-display">per second: <span id="cps-rate">0</span></div>
+        <div class="left-header-area">
+            <div class="bakery-title"><span id="bakery-name">Nigel</span>'s Bakery</div>
+            <div class="score-display"><span id="score">0</span> cookies</div>
+            <div class="cps-display">per second: <span id="cps-rate">0</span></div>
+        </div>
 
         <div class="cookie-wrapper" id="cookie-area">
-            <div class="cookie" id="cookie-btn">🍪</div>
+            <button class="cookie-img-btn" id="cookie-btn"></button>
         </div>
 
         <a href="index.html" class="nav-back">⬅ Menu</a>
     </div>
 
-    <!-- CENTER PANEL: News ticker & Project Status info -->
     <div class="center-panel">
         <div class="news-ticker" id="news-text">News: Loading today's flavor forecasts...</div>
-        <div class="center-content">
-            <p>🍪 Click the cookie on the left!</p>
-            <p>🛒 Buy auto-clickers and upgrades on the right.</p>
+        <div class="visual-lanes-container">
+            
+            <div class="lane-row">
+                <div class="lane-label">Cursor Rings Array</div>
+                <div class="lane-visuals" id="lane-t1"></div>
+            </div>
+
+            <div class="lane-row">
+                <div class="lane-label">Factory Laborers Lane</div>
+                <div class="lane-visuals" id="lane-t2"></div>
+            </div>
+
+            <div class="lane-row">
+                <div class="lane-label">Corporate Office Executive Lane</div>
+                <div class="lane-visuals" id="lane-t3"></div>
+            </div>
+
+            <div class="lane-row">
+                <div class="lane-label">Deep Mining Operations</div>
+                <div class="lane-visuals" id="lane-t4"></div>
+            </div>
+
         </div>
     </div>
 
-    <!-- RIGHT PANEL: Upgrades and Store -->
     <div class="right-panel">
         <div class="store-header">Store</div>
         
         <div class="upgrades-row">
-            <button class="upgrade-icon-btn" id="upg-c1" title="Reinforced Fingers (Cost: 100) - Doubles manual click power" disabled>☝️</button>
-            <button class="upgrade-icon-btn" id="upg-c2" title="Carpal Tunnel Prevention (Cost: 1,000) - Manual clicks do +5 cookies" disabled>🦾</button>
-            <button class="upgrade-icon-btn" id="upg-c3" title="Epic Click Macro (Cost: 10,000) - Manual clicks do +50 cookies" disabled>⚡</button>
+            <button class="upgrade-icon-btn" id="upg-c1">
+                ☝️
+                <span class="tooltip-text"><b>Reinforced Fingers</b><br>Cost: 100 cookies<br>Doubles your manual clicking power permanently.</span>
+            </button>
+            <button class="upgrade-icon-btn" id="upg-c2" disabled>
+                🦾
+                <span class="tooltip-text"><b>Carpal Tunnel Relief</b><br>Cost: 1,000 cookies<br>Adds a permanent permanent bonus flat +5 cookies to manual clicks.</span>
+            </button>
+            <button class="upgrade-icon-btn" id="upg-c3" disabled>
+                ⚡
+                <span class="tooltip-text"><b>Epic Click Macro</b><br>Cost: 10,000 cookies<br>Adds a massive permanent bonus flat +50 cookies per click.</span>
+            </button>
         </div>
 
         <div class="shop-list">
             <div class="shop-item" style="background-image: url('https://unsplash.com')">
+                <span class="tooltip-text"><b>Cursor</b><br>Generates +2 CPS.<br>Automatically presses the core cookie grid.</span>
                 <div class="item-info">
                     <h4>Cursor (<span id="count-t1">0</span>)</h4>
                     <p>+2 CPS • Macro Clicking Hand</p>
@@ -328,6 +399,7 @@
             </div>
 
             <div class="shop-item" style="background-image: url('https://unsplash.com')">
+                <span class="tooltip-text"><b>Factory Worker</b><br>Generates +10 CPS.<br>Bakes cookies efficiently inside factory zones.</span>
                 <div class="item-info">
                     <h4>Grandma (<span id="count-t2">0</span>)</h4>
                     <p>+10 CPS • Baked with love</p>
@@ -336,6 +408,7 @@
             </div>
 
             <div class="shop-item" style="background-image: url('https://unsplash.com')">
+                <span class="tooltip-text"><b>Farm</b><br>Generates +50 CPS.<br>Cultivates organic cookie plants across expansive plots.</span>
                 <div class="item-info">
                     <h4>Farm (<span id="count-t3">0</span>)</h4>
                     <p>+50 CPS • Growing cookie plants</p>
@@ -344,6 +417,7 @@
             </div>
 
             <div class="shop-item" style="background-image: url('https://unsplash.com')">
+                <span class="tooltip-text"><b>Mine</b><br>Generates +250 CPS.<br>Extracts ultra-pure raw cookie dough directly from deep Earth veins.</span>
                 <div class="item-info">
                     <h4>Mine (<span id="count-t4">0</span>)</h4>
                     <p>+250 CPS • Deep Earth dough mines</p>
@@ -352,6 +426,7 @@
             </div>
 
             <div class="shop-item" style="background-image: url('https://unsplash.com')">
+                <span class="tooltip-text"><b>Factory</b><br>Generates +1,200 CPS.<br>Fully automated heavy mass machinery assembly production plants.</span>
                 <div class="item-info">
                     <h4>Factory (<span id="count-t5">0</span>)</h4>
                     <p>+1,200 CPS • Industrial automation</p>
@@ -360,6 +435,7 @@
             </div>
 
             <div class="shop-item" style="background-image: url('https://unsplash.com')">
+                <span class="tooltip-text"><b>Reality Glitcher</b><br>Generates +8,000 CPS.<br>Hacks the source code constraints to inject infinite dough.</span>
                 <div class="item-info">
                     <h4>Reality Glitcher (<span id="count-t6">0</span>)</h4>
                     <p>+8,000 CPS • Bends engine rules</p>
@@ -376,12 +452,12 @@
         let cursorAngleOffset = 0;
         const spawnedCursorsArray = [];
         const upgrades = {
-            t1: { count: 0, cost: 15, baseCost: 15, cps: 2 },
-            t2: { count: 0, cost: 100, baseCost: 100, cps: 10 },
-            t3: { count: 0, cost: 500, baseCost: 500, cps: 50 },
-            t4: { count: 0, cost: 3000, baseCost: 3000, cps: 250 },
-            t5: { count: 0, cost: 20000, baseCost: 20000, cps: 1200 },
-            t6: { count: 0, cost: 150000, baseCost: 150000, cps: 8000 }
+            t1: { count: 0, cost: 15, baseCost: 15, cps: 2, visualSymbol: '▲' },
+            t2: { count: 0, cost: 100, baseCost: 100, cps: 10, visualSymbol: '👷' },
+            t3: { count: 0, cost: 500, baseCost: 500, cps: 50, visualSymbol: '💼' },
+            t4: { count: 0, cost: 3000, baseCost: 3000, cps: 250, visualSymbol: '⛏️' },
+            t5: { count: 0, cost: 20000, baseCost: 20000, cps: 1200, visualSymbol: '' },
+            t6: { count: 0, cost: 150000, baseCost: 150000, cps: 8000, visualSymbol: '' }
         };
         const clickUpgrades = {
             c1: { cost: 100, purchased: false, effect: () => { clickPower *= 2; } },
@@ -431,9 +507,15 @@
                     item.cost = Math.round(item.baseCost * Math.pow(1.5, item.count));
                     updateDisplay();
                     if (key === 't1') spawnVisualCursorElement();
+                    if (item.visualSymbol !== '' && document.getElementById('lane-' + key)) {
+                        const iconSpan = document.createElement('span');
+                        iconSpan.textContent = item.visualSymbol;
+                        document.getElementById('lane-' + key).appendChild(iconSpan);
+                    }
                 }
             });
         });
+
         Object.keys(clickUpgrades).forEach(function(key) {
             const upg = clickUpgrades[key];
             document.getElementById('upg-' + key).addEventListener('click', function() {
@@ -447,6 +529,7 @@
                 }
             });
         });
+
         function spawnVisualCursorElement() {
             const cursorEl = document.createElement('div');
             cursorEl.className = 'visual-cursor';
@@ -455,24 +538,27 @@
             spawnedCursorsArray.push(cursorEl);
             arrangeCursorsInCircle();
         }
+
         function arrangeCursorsInCircle() {
-            const radius = 95;
+            const radius = 145; /* Expanded circle ring radius for the bigger cookie placement boundary */
             const total = spawnedCursorsArray.length;
             spawnedCursorsArray.forEach(function(el, index) {
                 const angle = (index / total) * 2 * Math.PI + cursorAngleOffset;
-                const x = 125 + radius * Math.cos(angle) - 12;
-                const y = 125 + radius * Math.sin(angle) - 12;
+                const x = 160 + radius * Math.cos(angle) - 12;
+                const y = 160 + radius * Math.sin(angle) - 12;
                 el.style.left = x + 'px';
                 el.style.top = y + 'px';
                 el.style.transform = 'rotate(' + (angle + Math.PI / 2) + 'rad)';
             });
         }
+
         setInterval(function() {
             if (spawnedCursorsArray.length > 0) {
                 cursorAngleOffset += 0.02;
                 arrangeCursorsInCircle();
             }
         }, 30);
+
         setInterval(function() {
             let currentCps = 0;
             Object.keys(upgrades).forEach(function(k) { currentCps += upgrades[k].count * upgrades[k].cps; });
@@ -481,10 +567,12 @@
                 updateDisplay();
             }
         }, 1000);
+
         setInterval(function() {
             const randNews = newsFlabs[Math.floor(Math.random() * newsFlabs.length)];
             document.getElementById('news-text').textContent = randNews;
         }, 8000);
+
         function updateDisplay() {
             scoreDisplay.textContent = Math.floor(score).toLocaleString();
             let currentCps = 0;
@@ -504,22 +592,24 @@
                 }
             });
         }
+
         function createFloatingText(txt) {
             const text = document.createElement('div');
             text.classList.add('floating-text');
             text.textContent = txt;
             text.style.left = 'calc(50% - 10px)';
-            text.style.top = '70px';
+            text.style.top = '100px';
             cookieArea.appendChild(text);
             setTimeout(function() { text.remove(); }, 600);
         }
+
         function createCrumbs() {
             for (let i = 0; i < 4; i++) {
                 const crumb = document.createElement('div');
                 crumb.classList.add('crumb');
                 crumb.textContent = '•';
-                const randomX = (Math.random() - 0.5) * 160;
-                const randomY = (Math.random() * 100) + 50;
+                const randomX = (Math.random() - 0.5) * 200;
+                const randomY = (Math.random() * 120) + 60;
                 const duration = (Math.random() * 0.3) + 0.4;
                 crumb.style.setProperty('--x', randomX + 'px');
                 crumb.style.setProperty('--y', randomY + 'px');
