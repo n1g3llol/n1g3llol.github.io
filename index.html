@@ -2,266 +2,133 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cookie Clicker Mania</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Fun Arcade</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            color: white;
-            text-align: center;
+            background-color: #ffffff;
+            color: #333333;
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Top Title Styling */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .brand-header h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+            color: #111;
+        }
+
+        .brand-header p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 5px;
+        }
+
+        /* Responsive 3-Column Grid matching the picture */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* Individual Interactive Project Cards */
+        .game-card {
+            background: #f8f9fa;
+            border: 3px solid #111111;
+            border-radius: 16px;
+            height: 180px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            user-select: none;
-            touch-action: manipulation;
-            overflow: hidden;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .score-container {
-            font-size: 2rem;
-            font-weight: bold;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 10px 30px;
-            border-radius: 50px;
-            margin-bottom: 30px;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        .cookie-wrapper {
-            position: relative;
-            margin-bottom: 40px;
-            width: 200px;
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cookie {
-            font-size: 120px;
-            cursor: pointer;
-            display: inline-block;
-            filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.4));
-            transition: transform 0.05s ease;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* The Shake Animation Class */
-        .shake {
-            animation: cookieShake 0.15s ease-in-out;
-        }
-
-        @keyframes cookieShake {
-            0% { transform: scale(0.9) rotate(0deg); }
-            25% { transform: scale(0.9) rotate(-4deg); }
-            50% { transform: scale(0.9) rotate(4deg); }
-            75% { transform: scale(0.9) rotate(-2deg); }
-            100% { transform: scale(0.9) rotate(0deg); }
-        }
-
-        .upgrade-box {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 300px;
-            width: 100%;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            z-index: 10;
-        }
-
-        .upgrade-btn {
-            background-color: #e67e22;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-            width: 100%;
-            transition: background 0.2s, transform 0.1s;
-        }
-
-        .upgrade-btn:hover {
-            background-color: #d35400;
-        }
-
-        .upgrade-btn:disabled {
-            background-color: #7f8c8d;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .floating-text {
-            position: absolute;
-            color: #f1c40f;
+            text-decoration: none;
+            color: #111111;
             font-size: 1.8rem;
             font-weight: bold;
-            pointer-events: none;
-            animation: floatUp 0.6s ease-out forwards;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
-            z-index: 5;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0px 0px #111;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
 
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-80px) scale(0.8); }
+        /* Hover Pop-out Effects */
+        .game-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 6px 6px 0px #111111;
         }
 
-        /* Crumb styles */
-        .crumb {
-            position: absolute;
-            color: #b78550; /* Cookie brown color */
-            font-size: 24px;
-            font-weight: bold;
-            pointer-events: none;
-            z-index: 4;
-            animation: burst var(--duration) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        /* Distinctive Card Theme Customizations */
+        .card-cookie {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
         }
 
-        @keyframes burst {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
+        .card-coming-soon {
+            background: #f1f2f6;
+            color: #a4b0be;
+            border: 3px dashed #ced6e0;
+            cursor: default;
+        }
+        .card-coming-soon:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 900px) {
+            .game-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
-            100% {
-                transform: translate(var(--x), var(--y)) scale(0.4);
-                opacity: 0;
+        }
+        @media (max-width: 600px) {
+            .game-grid {
+                grid-template-columns: 1fr;
             }
+            .brand-header h1 { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
 
-    <h1>Cookie Clicker</h1>
-    <div class="score-container"><span id="score">0</span> Cookies</div>
-
-    <div class="cookie-wrapper" id="cookie-area">
-        <div class="cookie" id="cookie-btn">🍪</div>
+    <!-- Header Block -->
+    <div class="brand-header">
+        <h1>MY ARCADE</h1>
+        <p>games and stuff by me</p>
     </div>
 
-    <div class="upgrade-box">
-        <h3>Upgrades</h3>
-        <p>Auto-Clickers: <span id="auto-count">0</span></p>
-        <button class="upgrade-btn" id="upgrade-btn" disabled>Buy Auto-Clicker (Cost: 15)</button>
-        <p style="font-size: 0.85rem; color: #bdc3c7; margin-top: 8px;">Adds +1 cookie per second</p>
+    <!-- Arcade Showcase Grid -->
+    <div class="game-grid">
+
+        <!-- Card 1: Your Live Cookie Game Link -->
+        <a href="cookie.html" class="game-card card-cookie">
+            🍪 Cookie Clicker
+        </a>
+
+        <!-- Card 2: Placeholder for your next creation -->
+        <div class="game-card card-coming-soon">
+            ❓ Mystery Game 2
+        </div>
+
+        <!-- Card 3: Placeholder for your next creation -->
+        <div class="game-card card-coming-soon">
+            ❓ Mystery Game 3
+        </div>
+
     </div>
 
-    <script>
-        let score = 0;
-        let autoClickers = 0;
-        let upgradeCost = 15;
-
-        const scoreDisplay = document.getElementById('score');
-        const cookieBtn = document.getElementById('cookie-btn');
-        const cookieArea = document.getElementById('cookie-area');
-        const upgradeBtn = document.getElementById('upgrade-btn');
-        const autoCountDisplay = document.getElementById('auto-count');
-
-        // Click or Touch the Cookie
-        function handleToggleClick(e) {
-            e.preventDefault(); // Prevents phone double-zoom behavior
-            score++;
-            updateDisplay();
-            
-            // Trigger Shake
-            cookieBtn.classList.remove('shake');
-            void cookieBtn.offsetWidth; // Magic line to reset CSS animation instantly
-            cookieBtn.classList.add('shake');
-
-            createFloatingText();
-            createCrumbs();
-        }
-
-        // Support both mobile touches and mouse clicks responsively
-        cookieBtn.addEventListener('touchstart', handleToggleClick, { passive: false });
-        cookieBtn.addEventListener('mousedown', (e) => {
-            // Only trigger if it wasn't already handled by touchstart on a mobile screen
-            if (e.type === 'mousedown' && 'ontouchstart' in window) return;
-            handleToggleClick(e);
-        });
-
-        // Buy Upgrade
-        upgradeBtn.addEventListener('click', () => {
-            if (score >= upgradeCost) {
-                score -= upgradeCost;
-                autoClickers++;
-                upgradeCost = Math.round(upgradeCost * 1.5);
-                updateDisplay();
-            }
-        });
-
-        // Game Loop (Auto-Clickers)
-        setInterval(() => {
-            if (autoClickers > 0) {
-                score += autoClickers;
-                updateDisplay();
-            }
-        }, 1000);
-
-        function updateDisplay() {
-            scoreDisplay.textContent = score;
-            autoCountDisplay.textContent = autoClickers;
-            upgradeBtn.textContent = `Buy Auto-Clicker (Cost: ${upgradeCost})`;
-            
-            if (score >= upgradeCost) {
-                upgradeBtn.disabled = false;
-            } else {
-                upgradeBtn.disabled = true;
-            }
-        }
-
-        function createFloatingText() {
-            const text = document.createElement('div');
-            text.classList.add('floating-text');
-            text.textContent = '+1';
-            
-            // Position near the top-center of the cookie area
-            text.style.left = `calc(50% - 15px)`;
-            text.style.top = `20px`;
-            
-            cookieArea.appendChild(text);
-            setTimeout(() => text.remove(), 600);
-        }
-
-        function createCrumbs() {
-            // Generate 4 crumbs per click flying outwards
-            for (let i = 0; i < 4; i++) {
-                const crumb = document.createElement('div');
-                crumb.classList.add('crumb');
-                crumb.textContent = '•';
-                
-                // Explode outward in random directions (left/right and mostly down)
-                const randomX = (Math.random() - 0.5) * 160; // moves left or right
-                const randomY = (Math.random() * 100) + 50;  // drops downward
-                const duration = (Math.random() * 0.3) + 0.4; // 0.4s to 0.7s lifespan
-
-                crumb.style.setProperty('--x', `${randomX}px`);
-                crumb.style.setProperty('--y', `${randomY}px`);
-                crumb.style.setProperty('--duration', `${duration}s`);
-                
-                // Place crumb in the middle of the cookie container
-                crumb.style.left = `calc(50% - 5px)`;
-                crumb.style.top = `calc(50% - 15px)`;
-
-                cookieArea.appendChild(crumb);
-                setTimeout(() => crumb.remove(), duration * 1000);
-            }
-        }
-    </script>
 </body>
 </html>
