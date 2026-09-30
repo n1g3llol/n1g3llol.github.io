@@ -3,130 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cookie Clicker - Epik Nigel Edition</title>
+    <title>Cookie Clicker - Unique Edition</title>
+    <!-- Pulling bold Nunito Font from Google Fonts to match your homepage -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #111;
-            color: white;
+            font-family: 'Nunito', sans-serif;
+            background-color: #0f172a; /* Premium Dark Navy */
+            color: #f8fafc;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
+            flex-direction: column;
+            align-items: center;
             height: 100vh;
+            box-sizing: border-box;
             overflow: hidden;
             user-select: none;
             touch-action: manipulation;
-            box-sizing: border-box;
         }
 
-        #login-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .login-box {
-            background: #222;
-            padding: 30px;
-            border-radius: 15px;
-            border: 3px solid #e67e22;
+        /* 1. TOP SCORE PANEL */
+        .top-score-panel {
             text-align: center;
-            max-width: 320px;
-            width: 90%;
-        }
-        .login-box input {
-            width: 80%;
-            padding: 10px;
-            font-size: 1.1rem;
-            margin: 15px 0;
-            border-radius: 5px;
-            border: none;
-        }
-        .login-box button {
-            background: #e67e22;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
-        /* 3-Column Layout */
-        .left-panel {
-            flex: 1.2;
-            background: radial-gradient(circle, #2575fc 0%, #1a252f 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center; /* Centers everything vertically */
-            padding: 20px;
-            border-right: 4px solid #444;
-            position: relative;
-        }
-
-        .center-panel {
-            flex: 1.5;
-            background: #000000;
-            display: flex;
-            flex-direction: column;
-            border-right: 4px solid #444;
-        }
-
-        .right-panel {
-            flex: 1.2;
-            background: #2c3e50;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-
-        /* Left Column Content (Centered & Enlarged) */
-        .left-header-area {
-            text-align: center;
+            margin-top: 10px;
             margin-bottom: 20px;
-        }
-
-        .bakery-title {
-            font-size: 1.4rem;
-            font-weight: bold;
-            text-shadow: 2px 2px black;
-            margin-bottom: 5px;
+            z-index: 20;
         }
 
         .score-display {
-            font-size: 2.2rem;
-            font-weight: bold;
-            text-shadow: 2px 2px black;
+            font-size: 3rem;
+            font-weight: 900;
+            margin: 0;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .cps-display {
-            font-size: 1.1rem;
-            color: #ccc;
-            text-shadow: 1px 1px black;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+
+        /* MAIN GAME GRID LAYOUT */
+        .game-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr 1fr; /* Store Left, Cookie Center, Upgrades Right */
+            gap: 20px;
+            width: 100%;
+            max-width: 1300px;
+            flex-grow: 1;
+            height: calc(100vh - 180px);
+        }
+
+        /* Panel Bases */
+        .panel {
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 20px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #ff7e5f;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        /* 2. THE DEAD CENTER: ENLARGED COOKIE ZONE */
+        .center-panel {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
 
         .cookie-wrapper {
             position: relative;
-            width: 320px; /* Bigger layout wrapper box */
-            height: 320px;
+            width: 340px;
+            height: 340px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-                .cookie-img-btn {
-            width: 260px;
-            height: 260px;
+        .cookie-img-btn {
+            width: 300px; /* Massive oversized cookie dimension */
+            height: 300px;
             cursor: pointer;
-            transition: transform 0.05s ease;
+            transition: transform 0.05s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
-            background-image: url('cookie-pic.png?v=2'); /* Added ?v=2 to force the fresh transparent version */
+            background-image: url('cookie-pic.png?v=3'); /* Uses your transparent asset */
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -136,11 +120,9 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        .shake { animation: cookieShake 0.12s ease-in-out; }
-        @keyframes cookieShake {
-            0% { transform: scale(0.95); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        /* Dynamic click burst feedback scale */
+        .cookie-img-btn:active {
+            transform: scale(0.92);
         }
 
         .visual-cursor {
@@ -150,354 +132,239 @@
             z-index: 5;
         }
 
-        /* Center Panel Content: Worker visual production lanes */
-        .news-ticker {
-            background: #111;
-            border-bottom: 2px solid #444;
-            padding: 10px;
-            font-size: 0.9rem;
-            color: #f1c40f;
-            text-align: center;
-            font-style: italic;
-        }
-
-        .visual-lanes-container {
-            padding: 15px;
-            overflow-y: auto;
-            flex-grow: 1;
+        /* LEFT SIDEBAR: ASSET PURCHASING STORE */
+        .shop-list {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-
-        .lane-row {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 10px;
-            min-height: 70px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .lane-label {
-            font-size: 0.8rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        .lane-visuals {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            font-size: 1.6rem;
-        }
-
-        /* Right Panel: Advanced Tooltip Descriptions & Layout Store Styles */
-        .store-header {
-            background: #111;
-            padding: 10px;
-            font-size: 1.4rem;
-            font-weight: bold;
-            text-align: center;
-            border-bottom: 2px solid #444;
-        }
-
-        .upgrades-row {
-            display: flex;
-            gap: 10px;
-            padding: 10px;
-            background: rgba(0,0,0,0.3);
-            border-bottom: 2px solid #444;
-            overflow-x: auto;
-        }
-
-        /* Explanatory descriptions show up perfectly natively on mouse hover */
-        .upgrade-icon-btn, .shop-item {
-            position: relative;
-        }
-
-        .upgrade-icon-btn {
-            width: 52px;
-            height: 52px;
-            background: #e67e22;
-            border: 2px solid #fff;
-            border-radius: 8px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .upgrade-icon-btn:disabled { background: #555; opacity: 0.4; cursor: not-allowed; }
-
-        .shop-list { display: flex; flex-direction: column; }
 
         .shop-item {
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 15px;
-            border-bottom: 1px solid #444;
-            background-size: cover;
-            background-position: center;
-            min-height: 65px;
-        }
-        .shop-item::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.75);
-            z-index: 1;
+            position: relative;
         }
 
-        .item-info { position: relative; z-index: 2; text-align: left; }
-        .item-info h4 { margin: 0; font-size: 1.05rem; }
-        .item-info p { margin: 2px 0 0 0; font-size: 0.8rem; color: #bbb; }
+        .item-info h4 { margin: 0; font-size: 0.95rem; font-weight: 900; }
+        .item-info p { margin: 2px 0 0 0; font-size: 0.75rem; color: #94a3b8; }
 
         .buy-btn {
-            background: #e67e22;
+            background: #ff7e5f;
             color: white;
             border: none;
-            padding: 8px 14px;
-            font-weight: bold;
-            border-radius: 4px;
+            padding: 6px 12px;
+            font-weight: 700;
+            border-radius: 6px;
             cursor: pointer;
-            position: relative;
-            z-index: 2;
         }
-        .buy-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
+        .buy-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
 
-        /* Custom Hover Tooltips Box Configurations */
+        /* RIGHT SIDEBAR: CLICK POWER MODIFIERS */
+        .upgrade-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .upgrade-btn {
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            position: relative;
+        }
+        .upgrade-btn span { font-size: 0.7rem; font-weight: 700; color: #94a3b8; }
+        .upgrade-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #1e293b; }
+        .upgrade-btn.bought { border-color: #2ecc71; background: rgba(46, 204, 113, 0.1); }
+
+        /* ADVANCED INTEGRATED HOVER TOOLTIPS */
         .tooltip-text {
             visibility: hidden;
             position: absolute;
             z-index: 500;
-            width: 220px;
-            background-color: #222;
+            width: 200px;
+            background-color: #1e293b;
             color: #fff;
             text-align: left;
-            border: 2px solid #e67e22;
-            border-radius: 6px;
+            border: 2px solid #ff7e5f;
+            border-radius: 8px;
             padding: 10px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             box-shadow: 0px 5px 15px rgba(0,0,0,0.5);
             opacity: 0;
             transition: opacity 0.15s ease;
             pointer-events: none;
         }
-
-        /* Tooltip Positions based on row panels placement */
-        .upgrades-row .tooltip-text { top: 60px; left: 0; }
-        .shop-item .tooltip-text { right: 105%; top: 5px; }
-
-        /* Show tooltip descriptive boxes cleanly upon cursor mouse enter hovers */
-        .upgrade-icon-btn:hover .tooltip-text, .shop-item:hover .tooltip-text {
+        .shop-item .tooltip-text { left: 105%; top: 0; }
+        .upgrade-btn .tooltip-text { right: 105%; top: 0; }
+        .shop-item:hover .tooltip-text, .upgrade-btn:hover .tooltip-text {
             visibility: visible;
             opacity: 1;
         }
 
+        /* PARTICLES & FLOATING ANIMS */
         .floating-text {
-            position: absolute; color: #f1c40f; font-size: 1.8rem; font-weight: bold;
+            position: absolute; color: #feb47b; font-size: 1.8rem; font-weight: 900;
             pointer-events: none; animation: floatUp 0.6s ease-out forwards; z-index: 20;
         }
         @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-80px); } }
 
         .crumb {
-            position: absolute; color: #cc8e59; font-size: 20px; pointer-events: none; z-index: 15;
+            position: absolute; color: #ff7e5f; font-size: 20px; pointer-events: none; z-index: 15;
             animation: burst var(--duration) linear forwards;
         }
         @keyframes burst { 0% { opacity: 1; } 100% { transform: translate(var(--x), var(--y)); opacity: 0; } }
 
         .nav-back {
-            position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.5);
-            color: white; text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; z-index: 100;
+            position: fixed; bottom: 20px; left: 20px; background: #1e293b;
+            color: white; text-decoration: none; padding: 10px 18px; border-radius: 30px;
+            font-weight: 700; border: 2px solid #334155; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive Settings */
+        @media (max-width: 1000px) {
+            .game-grid { grid-template-columns: 1fr; overflow-y: auto; height: auto; }
+            body { overflow-y: auto; }
         }
     </style>
 </head>
 <body>
 
-        <div id="login-overlay">
-        <div class="login-box">
-            <h2>Enter Your Name</h2>
-            <p>Welcome to the bakery simulation!</p>
-            <input type="text" id="username-input" placeholder="Username..." maxlength="12">
-            <br>
-            <button id="start-game-btn">Play Game</button>
-        </div>
+    <!-- 1. TOP SCORE PANEL -->
+    <div class="top-score-panel">
+        <h1 class="score-display"><span id="score">0</span> cookies</h1>
+        <div class="cps-display">per second: <span id="cps-rate">0</span></div>
     </div>
 
-    <div class="left-panel">
-        <div class="left-header-area">
-            <div class="bakery-title"><span id="bakery-name">Nigel</span>'s Bakery</div>
-            <div class="score-display"><span id="score">0</span> cookies</div>
-            <div class="cps-display">per second: <span id="cps-rate">0</span></div>
-        </div>
-
-        <div class="cookie-wrapper" id="cookie-area">
-            <button class="cookie-img-btn" id="cookie-btn"></button>
-        </div>
-
-        <a href="index.html" class="nav-back">⬅ Menu</a>
-    </div>
-
-    <div class="center-panel">
-        <div class="news-ticker" id="news-text">News: Loading today's flavor forecasts...</div>
-        <div class="visual-lanes-container">
-            
-            <div class="lane-row">
-                <div class="lane-label">Cursor Rings Array</div>
-                <div class="lane-visuals" id="lane-t1"></div>
-            </div>
-
-            <div class="lane-row">
-                <div class="lane-label">Factory Laborers Lane</div>
-                <div class="lane-visuals" id="lane-t2"></div>
-            </div>
-
-            <div class="lane-row">
-                <div class="lane-label">Corporate Office Executive Lane</div>
-                <div class="lane-visuals" id="lane-t3"></div>
-            </div>
-
-            <div class="lane-row">
-                <div class="lane-label">Deep Mining Operations</div>
-                <div class="lane-visuals" id="lane-t4"></div>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="right-panel">
-        <div class="store-header">Store</div>
+    <!-- MAIN GAME LAYOUT WORKSPACE -->
+    <div class="game-grid">
         
-        <div class="upgrades-row">
-            <button class="upgrade-icon-btn" id="upg-c1">
-                ☝️
-                <span class="tooltip-text"><b>Reinforced Fingers</b><br>Cost: 100 cookies<br>Doubles your manual clicking power permanently.</span>
-            </button>
-            <button class="upgrade-icon-btn" id="upg-c2" disabled>
-                🦾
-                <span class="tooltip-text"><b>Carpal Tunnel Relief</b><br>Cost: 1,000 cookies<br>Adds a permanent permanent bonus flat +5 cookies to manual clicks.</span>
-            </button>
-            <button class="upgrade-icon-btn" id="upg-c3" disabled>
-                ⚡
-                <span class="tooltip-text"><b>Epic Click Macro</b><br>Cost: 10,000 cookies<br>Adds a massive permanent bonus flat +50 cookies per click.</span>
-            </button>
-        </div>
-
-        <div class="shop-list">
-            <div class="shop-item" style="background-image: url('https://unsplash.com')">
-                <span class="tooltip-text"><b>Cursor</b><br>Generates +2 CPS.<br>Automatically presses the core cookie grid.</span>
-                <div class="item-info">
-                    <h4>Cursor (<span id="count-t1">0</span>)</h4>
-                    <p>+2 CPS • Macro Clicking Hand</p>
+        <!-- LEFT: PRODUCTION SHOP PANEL -->
+        <div class="panel">
+            <div class="panel-title">Production Assets</div>
+            <div class="shop-list">
+                
+                <div class="shop-item">
+                    <span class="tooltip-text"><b>Cursor clicker</b><br>Generates +2 CPS.<br>Automatically presses the main cookie area.</span>
+                    <div class="item-info">
+                        <h4>Cursor (<span id="count-t1">0</span>)</h4>
+                        <p>+2 CPS</p>
+                    </div>
+                    <button class="buy-btn" id="btn-t1" disabled>Cost: 15</button>
                 </div>
-                <button class="buy-btn" id="btn-t1" disabled>Cost: 15</button>
-            </div>
 
-            <div class="shop-item" style="background-image: url('https://unsplash.com')">
-                <span class="tooltip-text"><b>Factory Worker</b><br>Generates +10 CPS.<br>Bakes cookies efficiently inside factory zones.</span>
-                <div class="item-info">
-                    <h4>Grandma (<span id="count-t2">0</span>)</h4>
-                    <p>+10 CPS • Baked with love</p>
+                <div class="shop-item">
+                    <span class="tooltip-text"><b>Factory Worker</b><br>Generates +10 CPS.<br>Bakes cookies efficiently inside factory zones.</span>
+                    <div class="item-info">
+                        <h4>Worker (<span id="count-t2">0</span>)</h4>
+                        <p>+10 CPS</p>
+                    </div>
+                    <button class="buy-btn" id="btn-t2" disabled>Cost: 100</button>
                 </div>
-                <button class="buy-btn" id="btn-t2" disabled>Cost: 100</button>
-            </div>
 
-            <div class="shop-item" style="background-image: url('https://unsplash.com')">
-                <span class="tooltip-text"><b>Farm</b><br>Generates +50 CPS.<br>Cultivates organic cookie plants across expansive plots.</span>
-                <div class="item-info">
-                    <h4>Farm (<span id="count-t3">0</span>)</h4>
-                    <p>+50 CPS • Growing cookie plants</p>
+                <div class="shop-item">
+                    <span class="tooltip-text"><b>Business Executive</b><br>Generates +50 CPS.<br>Optimizes corporate cookie yields.</span>
+                    <div class="item-info">
+                        <h4>Executive (<span id="count-t3">0</span>)</h4>
+                        <p>+50 CPS</p>
+                    </div>
+                    <button class="buy-btn" id="btn-t3" disabled>Cost: 500</button>
                 </div>
-                <button class="buy-btn" id="btn-t3" disabled>Cost: 500</button>
-            </div>
 
-            <div class="shop-item" style="background-image: url('https://unsplash.com')">
-                <span class="tooltip-text"><b>Mine</b><br>Generates +250 CPS.<br>Extracts ultra-pure raw cookie dough directly from deep Earth veins.</span>
-                <div class="item-info">
-                    <h4>Mine (<span id="count-t4">0</span>)</h4>
-                    <p>+250 CPS • Deep Earth dough mines</p>
+                <div class="shop-item">
+                    <span class="tooltip-text"><b>AI Supercomputer</b><br>Generates +250 CPS.<br>Calculates advanced recipe combinations.</span>
+                    <div class="item-info">
+                        <h4>Supercomputer (<span id="count-t4">0</span>)</h4>
+                        <p>+250 CPS</p>
+                    </div>
+                    <button class="buy-btn" id="btn-t4" disabled>Cost: 3,000</button>
                 </div>
-                <button class="buy-btn" id="btn-t4" disabled>Cost: 3,000</button>
-            </div>
 
-            <div class="shop-item" style="background-image: url('https://unsplash.com')">
-                <span class="tooltip-text"><b>Factory</b><br>Generates +1,200 CPS.<br>Fully automated heavy mass machinery assembly production plants.</span>
-                <div class="item-info">
-                    <h4>Factory (<span id="count-t5">0</span>)</h4>
-                    <p>+1,200 CPS • Industrial automation</p>
-                </div>
-                <button class="buy-btn" id="btn-t5" disabled>Cost: 20,000</button>
-            </div>
-
-            <div class="shop-item" style="background-image: url('https://unsplash.com')">
-                <span class="tooltip-text"><b>Reality Glitcher</b><br>Generates +8,000 CPS.<br>Hacks the source code constraints to inject infinite dough.</span>
-                <div class="item-info">
-                    <h4>Reality Glitcher (<span id="count-t6">0</span>)</h4>
-                    <p>+8,000 CPS • Bends engine rules</p>
-                </div>
-                <button class="buy-btn" id="btn-t6" disabled>Cost: 150,000</button>
             </div>
         </div>
+
+        <!-- CENTER: COOKIE CONSOLE LAYER -->
+        <div class="panel center-panel">
+            <div class="cookie-wrapper" id="cookie-area">
+                <button class="cookie-img-btn" id="cookie-btn"></button>
+            </div>
+        </div>
+
+        <!-- RIGHT: UPGRADES & CLICK BOOSTERS -->
+        <div class="panel">
+            <div class="panel-title">Click Boosters</div>
+            <div class="upgrade-grid">
+                
+                <button class="upgrade-btn" id="upg-c1" disabled>
+                    ☝️ <span>Cost: 100</span>
+                    <span class="tooltip-text"><b>Reinforced Fingers</b><br>Doubles your manual click power permanently.</span>
+                </button>
+
+                <button class="upgrade-btn" id="upg-c2" disabled>
+                    🦾 <span>Cost: 1,000</span>
+                    <span class="tooltip-text"><b>Carpal Tunnel Relief</b><br>Adds a permanent flat +5 cookies to manual clicks.</span>
+                </button>
+
+                <button class="upgrade-btn" id="upg-c3" disabled>
+                    ⚡ <span>Cost: 10,000</span>
+                    <span class="tooltip-text"><b>Epic Click Macro</b><br>Adds a massive permanent flat +50 cookies per click.</span>
+                </button>
+
+            </div>
+        </div>
+
     </div>
+
+    <a href="index.html" class="nav-back">⬅ Menu Hub</a>
 
     <script>
         let score = 0;
         let clickPower = 1;
-        let myUsername = "Anonymous";
         let cursorAngleOffset = 0;
         const spawnedCursorsArray = [];
         const upgrades = {
-            t1: { count: 0, cost: 15, baseCost: 15, cps: 2, visualSymbol: '▲' },
-            t2: { count: 0, cost: 100, baseCost: 100, cps: 10, visualSymbol: '👷' },
-            t3: { count: 0, cost: 500, baseCost: 500, cps: 50, visualSymbol: '💼' },
-            t4: { count: 0, cost: 3000, baseCost: 3000, cps: 250, visualSymbol: '⛏️' },
-            t5: { count: 0, cost: 20000, baseCost: 20000, cps: 1200, visualSymbol: '' },
-            t6: { count: 0, cost: 150000, baseCost: 150000, cps: 8000, visualSymbol: '' }
+            t1: { count: 0, cost: 15, baseCost: 15, cps: 2 },
+            t2: { count: 0, cost: 100, baseCost: 100, cps: 10 },
+            t3: { count: 0, cost: 500, baseCost: 500, cps: 50 },
+            t4: { count: 0, cost: 3000, baseCost: 3000, cps: 250 }
         };
         const clickUpgrades = {
             c1: { cost: 100, purchased: false, effect: () => { clickPower *= 2; } },
             c2: { cost: 1000, purchased: false, effect: () => { clickPower += 5; } },
             c3: { cost: 10000, purchased: false, effect: () => { clickPower += 50; } }
         };
-        const newsFlabs = [
-            "News: Cookies tested on giraffes, found to have no ill effects.",
-            "News: New cookie formula taking classroom by storm!",
-            "News: High cookie production suspected of messing with space-time continuum.",
-            "News: Grandmas claim they are browning biscuits at record speed."
-        ];
         const scoreDisplay = document.getElementById('score');
         const cpsDisplay = document.getElementById('cps-rate');
         const cookieBtn = document.getElementById('cookie-btn');
         const cookieArea = document.getElementById('cookie-area');
-        document.getElementById('start-game-btn').addEventListener('click', function() {
-            const val = document.getElementById('username-input').value.trim();
-            if(val !== "") {
-                myUsername = val;
-                document.getElementById('bakery-name').textContent = myUsername;
-                document.getElementById('login-overlay').style.display = 'none';
-                updateDisplay();
-            }
-        });
-        function triggerCookiePress(e) {
+
+        // Click Action Handling Engine
+        function handleCookiePress(e) {
             if(e) e.preventDefault();
             score += clickPower;
             updateDisplay();
-            cookieBtn.classList.remove('shake');
-            void cookieBtn.offsetWidth;
-            cookieBtn.classList.add('shake');
             createFloatingText("+" + clickPower);
             createCrumbs();
         }
-        cookieBtn.addEventListener('touchstart', triggerCookiePress, { passive: false });
+        cookieBtn.addEventListener('touchstart', handleCookiePress, { passive: false });
         cookieBtn.addEventListener('mousedown', function(e) {
             if (e.type === 'mousedown' && 'ontouchstart' in window) return;
-            triggerCookiePress(e);
+            handleCookiePress(e);
         });
+
+        // Shop System Click Listeners Loop
         Object.keys(upgrades).forEach(function(key) {
             const item = upgrades[key];
             document.getElementById('btn-' + key).addEventListener('click', function() {
@@ -507,23 +374,20 @@
                     item.cost = Math.round(item.baseCost * Math.pow(1.5, item.count));
                     updateDisplay();
                     if (key === 't1') spawnVisualCursorElement();
-                    if (item.visualSymbol !== '' && document.getElementById('lane-' + key)) {
-                        const iconSpan = document.createElement('span');
-                        iconSpan.textContent = item.visualSymbol;
-                        document.getElementById('lane-' + key).appendChild(iconSpan);
-                    }
                 }
             });
         });
 
+        // Click Power Booster Triggers Loop
         Object.keys(clickUpgrades).forEach(function(key) {
             const upg = clickUpgrades[key];
-            document.getElementById('upg-' + key).addEventListener('click', function() {
+            const upgBtn = document.getElementById('upg-' + key);
+            upgBtn.addEventListener('click', function() {
                 if (score >= upg.cost && !upg.purchased) {
                     score -= upg.cost;
                     upg.purchased = true;
                     upg.effect();
-                    this.style.background = '#2ecc71';
+                    this.classList.add('bought');
                     this.disabled = true;
                     updateDisplay();
                 }
@@ -540,18 +404,19 @@
         }
 
         function arrangeCursorsInCircle() {
-            const radius = 145; /* Expanded circle ring radius for the bigger cookie placement boundary */
+            const radius = 165;
             const total = spawnedCursorsArray.length;
             spawnedCursorsArray.forEach(function(el, index) {
                 const angle = (index / total) * 2 * Math.PI + cursorAngleOffset;
-                const x = 160 + radius * Math.cos(angle) - 12;
-                const y = 160 + radius * Math.sin(angle) - 12;
+                const x = 170 + radius * Math.cos(angle) - 12;
+                const y = 170 + radius * Math.sin(angle) - 12;
                 el.style.left = x + 'px';
                 el.style.top = y + 'px';
                 el.style.transform = 'rotate(' + (angle + Math.PI / 2) + 'rad)';
             });
         }
 
+        // Spin the rings smoothly
         setInterval(function() {
             if (spawnedCursorsArray.length > 0) {
                 cursorAngleOffset += 0.02;
@@ -559,31 +424,27 @@
             }
         }, 30);
 
+        // Offline Payout Tick (Runs every 1s)
         setInterval(function() {
-            let currentCps = 0;
-            Object.keys(upgrades).forEach(function(k) { currentCps += upgrades[k].count * upgrades[k].cps; });
-            if (currentCps > 0) {
-                score += currentCps;
+            let totalCps = 0;
+            Object.keys(upgrades).forEach(function(k) { totalCps += upgrades[k].count * upgrades[k].cps; });
+            if (totalCps > 0) {
+                score += totalCps;
                 updateDisplay();
             }
         }, 1000);
 
-        setInterval(function() {
-            const randNews = newsFlabs[Math.floor(Math.random() * newsFlabs.length)];
-            document.getElementById('news-text').textContent = randNews;
-        }, 8000);
-
         function updateDisplay() {
             scoreDisplay.textContent = Math.floor(score).toLocaleString();
-            let currentCps = 0;
+            let totalCps = 0;
             Object.keys(upgrades).forEach(function(k) {
-                currentCps += upgrades[k].count * upgrades[k].cps;
+                totalCps += upgrades[k].count * upgrades[k].cps;
                 const btn = document.getElementById('btn-' + k);
                 document.getElementById('count-' + k).textContent = upgrades[k].count;
                 btn.textContent = 'Cost: ' + upgrades[k].cost.toLocaleString();
                 btn.disabled = score < upgrades[k].cost;
             });
-            cpsDisplay.textContent = currentCps.toLocaleString();
+            cpsDisplay.textContent = totalCps.toLocaleString();
             Object.keys(clickUpgrades).forEach(function(key) {
                 const upg = clickUpgrades[key];
                 const upgBtn = document.getElementById('upg-' + key);
@@ -597,8 +458,8 @@
             const text = document.createElement('div');
             text.classList.add('floating-text');
             text.textContent = txt;
-            text.style.left = 'calc(50% - 10px)';
-            text.style.top = '100px';
+            text.style.left = 'calc(50% - 15px)';
+            text.style.top = '110px';
             cookieArea.appendChild(text);
             setTimeout(function() { text.remove(); }, 600);
         }
@@ -620,6 +481,8 @@
                 setTimeout(function() { crumb.remove(); }, duration * 1000);
             }
         }
+
+        // Initialize display configuration on launch
         updateDisplay();
     </script>
 </body>
