@@ -387,13 +387,14 @@
             </div>
         </div>
     </div>
-
+    
     <script>
         let score = 0;
         let clickPower = 1;
         let myUsername = "Anonymous";
         let cursorAngleOffset = 0;
         const spawnedCursorsArray = [];
+
         const upgrades = {
             t1: { count: 0, cost: 15, baseCost: 15, cps: 2 },
             t2: { count: 0, cost: 100, baseCost: 100, cps: 10 },
@@ -402,21 +403,26 @@
             t5: { count: 0, cost: 20000, baseCost: 20000, cps: 1200 },
             t6: { count: 0, cost: 150000, baseCost: 150000, cps: 8000 }
         };
+
         const clickUpgrades = {
-            c1: { cost: 100, purchased: false, effect: () => { clickPower *= 2; } },
-            c2: { cost: 1000, purchased: false, effect: () => { clickPower += 5; } },
-            c3: { cost: 10000, purchased: false, effect: () => { clickPower += 50; } }
+            c1: { cost: 100, purchased: false, effect: function() { clickPower *= 2; } },
+            c2: { cost: 1000, purchased: false, effect: function() { clickPower += 5; } },
+            c3: { cost: 10000, purchased: false, effect: function() { clickPower += 50; } }
         };
+
         const newsFlabs = [
             "News: Cookies tested on giraffes, found to have no ill effects.",
             "News: New cookie formula taking classroom by storm!",
             "News: High cookie production suspected of messing with space-time continuum.",
             "News: Grandmas claim they are browning biscuits at record speed."
         ];
+
         const scoreDisplay = document.getElementById('score');
         const cpsDisplay = document.getElementById('cps-rate');
         const cookieBtn = document.getElementById('cookie-btn');
         const cookieArea = document.getElementById('cookie-area');
+
+        // FIXED: The Login Activation Engine
         document.getElementById('start-game-btn').addEventListener('click', function() {
             const val = document.getElementById('username-input').value.trim();
             if(val !== "") {
@@ -424,8 +430,10 @@
                 document.getElementById('bakery-name').textContent = myUsername;
                 document.getElementById('login-overlay').style.display = 'none';
                 initCloudSync();
+                updateDisplay(); // Unlocks and displays initial configurations instantly
             }
         });
+        
         function triggerCookiePress(e) {
             if(e) e.preventDefault();
             score += clickPower;
