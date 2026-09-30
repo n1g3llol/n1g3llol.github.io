@@ -391,15 +391,16 @@
                 }
             });
         });
-        // Physical Cursor Spawning Mechanics Fixed
+                // Physical Cursor Spawning Mechanics Fixed
         function spawnVisualCursorElement() {
             const cursorEl = document.createElement('div');
             cursorEl.className = 'visual-cursor';
-            cursorEl.textContent = '🖱️';
+            cursorEl.textContent = '▲';
             cookieArea.appendChild(cursorEl);
             spawnedCursorsArray.push(cursorEl);
             arrangeCursorsInCircle();
         }
+
         function arrangeCursorsInCircle() {
             const radius = 105;
             const total = spawnedCursorsArray.length;
