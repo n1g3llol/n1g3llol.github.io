@@ -19,7 +19,6 @@
             box-sizing: border-box;
         }
 
-        /* Username Modal Setup */
         #login-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -58,7 +57,7 @@
             font-weight: bold;
         }
 
-        /* 3-Column Layout Matching the Screenshot */
+        /* 3-Column Layout */
         .left-panel {
             flex: 1;
             background: radial-gradient(circle, #2575fc 0%, #1a252f 100%);
@@ -138,7 +137,7 @@
             z-index: 5;
         }
 
-        /* Center Side: News & Leaderboard */
+        /* Center Side: News & Status Display */
         .news-ticker {
             background: #111;
             border-bottom: 2px solid #444;
@@ -153,28 +152,12 @@
             padding: 20px;
             overflow-y: auto;
             flex-grow: 1;
-        }
-
-        .panel-title {
-            font-size: 1.3rem;
-            text-transform: uppercase;
-            color: #e67e22;
-            border-bottom: 2px solid #e67e22;
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-        }
-
-        .leaderboard-entry {
             display: flex;
-            justify-content: space-between;
-            padding: 8px;
-            background: rgba(255,255,255,0.05);
-            margin-bottom: 5px;
-            border-radius: 4px;
-        }
-        .leaderboard-entry.self {
-            border: 1px solid #e67e22;
-            background: rgba(230, 126, 34, 0.2);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 1.1rem;
         }
 
         /* Right Side: Store Panel */
@@ -240,6 +223,7 @@
         .item-info {
             position: relative;
             z-index: 2;
+            text-align: left;
         }
         .item-info h4 { margin: 0; font-size: 1rem; }
         .item-info p { margin: 2px 0 0 0; font-size: 0.75rem; color: #aaa; }
@@ -295,7 +279,7 @@
     <div id="login-overlay">
         <div class="login-box">
             <h2>Enter Your Name</h2>
-            <p>Join the server leaderboard!</p>
+            <p>Welcome to the bakery simulation!</p>
             <input type="text" id="username-input" placeholder="Username..." maxlength="12">
             <br>
             <button id="start-game-btn">Play Game</button>
@@ -315,14 +299,12 @@
         <a href="index.html" class="nav-back">⬅ Menu</a>
     </div>
 
-    <!-- CENTER PANEL: News ticker & Live Leaderboard -->
+    <!-- CENTER PANEL: News ticker & Project Status info -->
     <div class="center-panel">
         <div class="news-ticker" id="news-text">News: Loading today's flavor forecasts...</div>
         <div class="center-content">
-            <div class="panel-title">🏆 Shared Leaderboard</div>
-            <div id="leaderboard-list">
-                <div style="color:#777;">Connecting to database server...</div>
-            </div>
+            <p>🍪 Click the cookie on the left!</p>
+            <p>🛒 Buy auto-clickers and upgrades on the right.</p>
         </div>
     </div>
 
@@ -330,7 +312,6 @@
     <div class="right-panel">
         <div class="store-header">Store</div>
         
-        <!-- Cookie Clicking Multiplier Upgrades Panel -->
         <div class="upgrades-row">
             <button class="upgrade-icon-btn" id="upg-c1" title="Reinforced Fingers (Cost: 100) - Doubles manual click power" disabled>☝️</button>
             <button class="upgrade-icon-btn" id="upg-c2" title="Carpal Tunnel Prevention (Cost: 1,000) - Manual clicks do +5 cookies" disabled>🦾</button>
@@ -387,14 +368,13 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         let score = 0;
         let clickPower = 1;
         let myUsername = "Anonymous";
         let cursorAngleOffset = 0;
         const spawnedCursorsArray = [];
-
         const upgrades = {
             t1: { count: 0, cost: 15, baseCost: 15, cps: 2 },
             t2: { count: 0, cost: 100, baseCost: 100, cps: 10 },
@@ -403,37 +383,30 @@
             t5: { count: 0, cost: 20000, baseCost: 20000, cps: 1200 },
             t6: { count: 0, cost: 150000, baseCost: 150000, cps: 8000 }
         };
-
         const clickUpgrades = {
-            c1: { cost: 100, purchased: false, effect: function() { clickPower *= 2; } },
-            c2: { cost: 1000, purchased: false, effect: function() { clickPower += 5; } },
-            c3: { cost: 10000, purchased: false, effect: function() { clickPower += 50; } }
+            c1: { cost: 100, purchased: false, effect: () => { clickPower *= 2; } },
+            c2: { cost: 1000, purchased: false, effect: () => { clickPower += 5; } },
+            c3: { cost: 10000, purchased: false, effect: () => { clickPower += 50; } }
         };
-
         const newsFlabs = [
             "News: Cookies tested on giraffes, found to have no ill effects.",
             "News: New cookie formula taking classroom by storm!",
             "News: High cookie production suspected of messing with space-time continuum.",
             "News: Grandmas claim they are browning biscuits at record speed."
         ];
-
         const scoreDisplay = document.getElementById('score');
         const cpsDisplay = document.getElementById('cps-rate');
         const cookieBtn = document.getElementById('cookie-btn');
         const cookieArea = document.getElementById('cookie-area');
-
-        // FIXED: The Login Activation Engine
         document.getElementById('start-game-btn').addEventListener('click', function() {
             const val = document.getElementById('username-input').value.trim();
             if(val !== "") {
                 myUsername = val;
                 document.getElementById('bakery-name').textContent = myUsername;
                 document.getElementById('login-overlay').style.display = 'none';
-                initCloudSync();
-                updateDisplay(); // Unlocks and displays initial configurations instantly
+                updateDisplay();
             }
         });
-        
         function triggerCookiePress(e) {
             if(e) e.preventDefault();
             score += clickPower;
@@ -449,7 +422,6 @@
             if (e.type === 'mousedown' && 'ontouchstart' in window) return;
             triggerCookiePress(e);
         });
-        // Shop Purchase Systems
         Object.keys(upgrades).forEach(function(key) {
             const item = upgrades[key];
             document.getElementById('btn-' + key).addEventListener('click', function() {
@@ -462,7 +434,6 @@
                 }
             });
         });
-        // Click Power Upgrades Systems
         Object.keys(clickUpgrades).forEach(function(key) {
             const upg = clickUpgrades[key];
             document.getElementById('upg-' + key).addEventListener('click', function() {
@@ -510,7 +481,6 @@
                 updateDisplay();
             }
         }, 1000);
-        // News Feed Engine
         setInterval(function() {
             const randNews = newsFlabs[Math.floor(Math.random() * newsFlabs.length)];
             document.getElementById('news-text').textContent = randNews;
@@ -545,60 +515,22 @@
         }
         function createCrumbs() {
             for (let i = 0; i < 4; i++) {
-        const crumb = document.createElement('div');
-        crumb.classList.add('crumb');
-        crumb.textContent = '•';
-        const randomX = (Math.random() - 0.5) * 160;
-        const randomY = (Math.random() * 100) + 50;
-        const duration = (Math.random() * 0.3) + 0.4;
-        crumb.style.setProperty('--x', randomX + 'px');
-        crumb.style.setProperty('--y', randomY + 'px');
-        crumb.style.setProperty('--duration', duration + 's');
-        crumb.style.left = '50%';
-        crumb.style.top = '50%';
-        cookieArea.appendChild(crumb);
-        setTimeout(function() { crumb.remove(); }, duration * 1000);
-    }
-}
-
-async function initCloudSync() {
-    setInterval(syncLeaderboard, 6000);
-    syncLeaderboard();
-}
-
-async function syncLeaderboard() {
-    try {
-        const res = await fetch('https://jsonbin.io', {
-            headers: { 'X-Master-Key': '$2a$10$R9nE.pPz3v9x8D.K82u0O.o9Xh1Dym4P6c9zZ29LhA/1V3uU3WcK.' }
-        });
-        const data = await res.json();
-        let scores = data.record.scores || [];
-        const playerIndex = scores.findIndex(function(u) { return u.name.toLowerCase() === myUsername.toLowerCase(); });
-        if (playerIndex !== -1) {
-            if (score > scores[playerIndex].score) scores[playerIndex].score = Math.floor(score);
-        } else {
-            scores.push({ name: myUsername, score: Math.floor(score) });
+                const crumb = document.createElement('div');
+                crumb.classList.add('crumb');
+                crumb.textContent = '•';
+                const randomX = (Math.random() - 0.5) * 160;
+                const randomY = (Math.random() * 100) + 50;
+                const duration = (Math.random() * 0.3) + 0.4;
+                crumb.style.setProperty('--x', randomX + 'px');
+                crumb.style.setProperty('--y', randomY + 'px');
+                crumb.style.setProperty('--duration', duration + 's');
+                crumb.style.left = '50%';
+                crumb.style.top = '50%';
+                cookieArea.appendChild(crumb);
+                setTimeout(function() { crumb.remove(); }, duration * 1000);
+            }
         }
-        scores.sort(function(a, b) { return b.score - a.score; });
-        scores = scores.slice(0, 7);
-        const container = document.getElementById('leaderboard-list');
-        container.innerHTML = '';
-        scores.forEach(function(entry, idx) {
-            const row = document.createElement('div');
-            row.className = 'leaderboard-entry ' + (entry.name.toLowerCase() === myUsername.toLowerCase() ? 'self' : '');
-            row.innerHTML = '#' + (idx + 1) + ' ' + entry.name + ' ' + entry.score.toLocaleString() + ' 🍪';
-            container.appendChild(row);
-        });
-        await fetch('https://jsonbin.io', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': '$2a$10$R9nE.pPz3v9x8D.K82u0O.o9Xh1Dym4P6c9zZ29LhA/1V3uU3WcK.'
-            },
-            body: JSON.stringify({ scores: scores })
-        });
-    } catch (err) {
-        console.log("Leaderboard sync skipped.");
-    }
-}
-updateDisplay();
+        updateDisplay();
+    </script>
+</body>
+</html>
