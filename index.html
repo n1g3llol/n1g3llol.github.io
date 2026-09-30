@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cookie Clicker Mania</title>
     <style>
         body {
@@ -18,6 +18,8 @@
             justify-content: center;
             min-height: 100vh;
             user-select: none;
+            touch-action: manipulation;
+            overflow: hidden;
         }
 
         h1 {
@@ -39,18 +41,33 @@
         .cookie-wrapper {
             position: relative;
             margin-bottom: 40px;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .cookie {
             font-size: 120px;
             cursor: pointer;
-            transition: transform 0.05s ease;
             display: inline-block;
             filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.4));
+            transition: transform 0.05s ease;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .cookie:active {
-            transform: scale(0.9);
+        /* The Shake Animation Class */
+        .shake {
+            animation: cookieShake 0.15s ease-in-out;
+        }
+
+        @keyframes cookieShake {
+            0% { transform: scale(0.9) rotate(0deg); }
+            25% { transform: scale(0.9) rotate(-4deg); }
+            50% { transform: scale(0.9) rotate(4deg); }
+            75% { transform: scale(0.9) rotate(-2deg); }
+            100% { transform: scale(0.9) rotate(0deg); }
         }
 
         .upgrade-box {
@@ -62,6 +79,7 @@
             max-width: 300px;
             width: 100%;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 10;
         }
 
         .upgrade-btn {
@@ -91,16 +109,39 @@
         .floating-text {
             position: absolute;
             color: #f1c40f;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
             pointer-events: none;
-            animation: floatUp 0.8s ease-out forwards;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            animation: floatUp 0.6s ease-out forwards;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+            z-index: 5;
         }
 
         @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-100px); }
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-80px) scale(0.8); }
+        }
+
+        /* Crumb styles */
+        .crumb {
+            position: absolute;
+            color: #b78550; /* Cookie brown color */
+            font-size: 24px;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 4;
+            animation: burst var(--duration) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes burst {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(0.4);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -131,11 +172,27 @@
         const upgradeBtn = document.getElementById('upgrade-btn');
         const autoCountDisplay = document.getElementById('auto-count');
 
-        // Click the Cookie
-        cookieBtn.addEventListener('click', (e) => {
+        // Click or Touch the Cookie
+        function handleToggleClick(e) {
+            e.preventDefault(); // Prevents phone double-zoom behavior
             score++;
             updateDisplay();
-            createFloatingText(e);
+            
+            // Trigger Shake
+            cookieBtn.classList.remove('shake');
+            void cookieBtn.offsetWidth; // Magic line to reset CSS animation instantly
+            cookieBtn.classList.add('shake');
+
+            createFloatingText();
+            createCrumbs();
+        }
+
+        // Support both mobile touches and mouse clicks responsively
+        cookieBtn.addEventListener('touchstart', handleToggleClick, { passive: false });
+        cookieBtn.addEventListener('mousedown', (e) => {
+            // Only trigger if it wasn't already handled by touchstart on a mobile screen
+            if (e.type === 'mousedown' && 'ontouchstart' in window) return;
+            handleToggleClick(e);
         });
 
         // Buy Upgrade
@@ -143,12 +200,12 @@
             if (score >= upgradeCost) {
                 score -= upgradeCost;
                 autoClickers++;
-                upgradeCost = Math.round(upgradeCost * 1.5); // Increase cost for next one
+                upgradeCost = Math.round(upgradeCost * 1.5);
                 updateDisplay();
             }
         });
 
-        // Game Loop (Runs every second for Auto-Clickers)
+        // Game Loop (Auto-Clickers)
         setInterval(() => {
             if (autoClickers > 0) {
                 score += autoClickers;
@@ -161,7 +218,6 @@
             autoCountDisplay.textContent = autoClickers;
             upgradeBtn.textContent = `Buy Auto-Clicker (Cost: ${upgradeCost})`;
             
-            // Check if player can afford upgrade
             if (score >= upgradeCost) {
                 upgradeBtn.disabled = false;
             } else {
@@ -169,21 +225,42 @@
             }
         }
 
-        function createFloatingText(e) {
+        function createFloatingText() {
             const text = document.createElement('div');
             text.classList.add('floating-text');
             text.textContent = '+1';
             
-            // Center the text roughly around the click location
-            text.style.left = `50%`;
+            // Position near the top-center of the cookie area
+            text.style.left = `calc(50% - 15px)`;
             text.style.top = `20px`;
             
             cookieArea.appendChild(text);
-            
-            // Remove text after animation finishes
-            setTimeout(() => {
-                text.remove();
-            }, 800);
+            setTimeout(() => text.remove(), 600);
+        }
+
+        function createCrumbs() {
+            // Generate 4 crumbs per click flying outwards
+            for (let i = 0; i < 4; i++) {
+                const crumb = document.createElement('div');
+                crumb.classList.add('crumb');
+                crumb.textContent = '•';
+                
+                // Explode outward in random directions (left/right and mostly down)
+                const randomX = (Math.random() - 0.5) * 160; // moves left or right
+                const randomY = (Math.random() * 100) + 50;  // drops downward
+                const duration = (Math.random() * 0.3) + 0.4; // 0.4s to 0.7s lifespan
+
+                crumb.style.setProperty('--x', `${randomX}px`);
+                crumb.style.setProperty('--y', `${randomY}px`);
+                crumb.style.setProperty('--duration', `${duration}s`);
+                
+                // Place crumb in the middle of the cookie container
+                crumb.style.left = `calc(50% - 5px)`;
+                crumb.style.top = `calc(50% - 15px)`;
+
+                cookieArea.appendChild(crumb);
+                setTimeout(() => crumb.remove(), duration * 1000);
+            }
         }
     </script>
 </body>
