@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>epik games to play</title>
+    <!-- Pulling Nunito Font directly from Google Fonts -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ffffff;
-            color: #333333;
+            font-family: 'Nunito', sans-serif;
+            background-color: #0f172a; /* Premium Dark Navy */
+            color: #f8fafc;
             margin: 0;
             padding: 40px 20px;
             display: flex;
@@ -18,137 +23,147 @@
             box-sizing: border-box;
         }
 
-        /* Top Title Styling */
+        /* Header Styling with Bold Nunito */
         .brand-header {
             text-align: center;
             margin-bottom: 50px;
         }
 
         .brand-header h1 {
-            font-size: 3.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-size: 3.5rem;
+            font-weight: 900; /* Extra Bold Nunito */
+            text-transform: lowercase;
+            letter-spacing: -1px;
             margin: 0;
-            color: #111;
-            font-weight: 900;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .brand-header p {
-            color: #555;
+            color: #94a3b8;
             font-size: 1.3rem;
-            margin-top: 8px;
-            font-style: italic;
-            font-weight: 600;
+            margin-top: 10px;
+            font-weight: 700;
         }
 
-        /* Responsive 3-Column Grid matching the picture */
+        /* 3-Column Games Grid */
         .game-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            max-width: 1100px;
+            gap: 30px;
+            max-width: 1200px;
             width: 100%;
             flex-grow: 1;
         }
 
-        /* Individual Interactive Project Cards */
+        /* Premium Interactive Game Cards */
         .game-card {
-            background: #f8f9fa;
-            border: 3px solid #111111;
-            border-radius: 16px;
-            height: 180px;
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 20px;
+            height: 220px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            color: #111111;
+            color: #ffffff;
             font-size: 1.8rem;
-            font-weight: bold;
+            font-weight: 900;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0px 0px #111;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s;
         }
 
-        /* Hover Pop-out Effects */
+        /* Smooth Floating Hover Effect */
         .game-card:hover {
-            transform: translate(-4px, -4px);
-            box-shadow: 6px 6px 0px #111111;
+            transform: translateY(-8px);
+            border-color: #ff7e5f;
         }
 
-        /* Distinctive Card Theme Customizations */
         .card-cookie {
-            background: linear-gradient(135deg, #e67e22, #f39c12);
-            color: white;
+            background: linear-gradient(135deg, #1e293b 0%, #2c1d11 100%);
+        }
+        
+        .card-cookie span {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
         }
 
         .card-coming-soon {
-            background: #f1f2f6;
-            color: #a4b0be;
-            border: 3px dashed #ced6e0;
+            background: #0f172a;
+            color: #475569;
+            border: 2px dashed #334155;
             cursor: default;
         }
         .card-coming-soon:hover {
             transform: none;
-            box-shadow: none;
+            border-color: #334155;
+        }
+        
+        .card-coming-soon span {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            opacity: 0.3;
         }
 
-        /* Footer Credits Styling */
+        /* Footer Credits */
         .footer-credits {
             text-align: center;
             margin-top: 60px;
-            padding: 20px 0;
+            padding-top: 20px;
             font-size: 1rem;
-            color: #777;
+            color: #64748b;
             width: 100%;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #1e293b;
+            font-weight: 400;
         }
 
-        /* Mobile Optimization */
+        /* Responsive Layout Settings for Mobile Phones */
         @media (max-width: 900px) {
-            .game-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .game-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 600px) {
-            .game-grid {
-                grid-template-columns: 1fr;
-            }
-            .brand-header h1 { font-size: 2.2rem; }
+            .game-grid { grid-template-columns: 1fr; }
+            .brand-header h1 { font-size: 2.5rem; }
             .brand-header p { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header Block -->
+    <!-- Header Area -->
     <div class="brand-header">
         <h1>epik games to play</h1>
         <p>made by nigel the goat</p>
     </div>
 
-    <!-- Arcade Showcase Grid -->
+    <!-- Main Grid Workspace -->
     <div class="game-grid">
 
-        <!-- Card 1: Your Live Cookie Game Link -->
+        <!-- Card 1: Your Clean Cookie Clicker Game -->
         <a href="cookie.html" class="game-card card-cookie">
-            🍪 Cookie Clicker
+            <span>🍪</span>
+            Cookie Clicker
         </a>
 
-        <!-- Card 2: Placeholder for your next creation -->
+        <!-- Card 2: Slot for your next creation -->
         <div class="game-card card-coming-soon">
-            ❓ Mystery Game 2
+            <span>🔒</span>
+            Mystery Game 2
         </div>
 
-        <!-- Card 3: Placeholder for your next creation -->
+        <!-- Card 3: Slot for your next creation -->
         <div class="game-card card-coming-soon">
-            ❓ Mystery Game 3
+            <span>🔒</span>
+            Mystery Game 3
         </div>
 
     </div>
 
-    <!-- Footer Credits -->
+    <!-- Footer Area -->
     <div class="footer-credits">
         inspired by neal.fun
     </div>
