@@ -7,24 +7,23 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #111, #1a252f);
+            background-color: #111;
             color: white;
-            text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
             user-select: none;
             touch-action: manipulation;
             box-sizing: border-box;
         }
 
+        /* Username Modal Setup */
         #login-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             z-index: 1000;
             display: flex;
             flex-direction: column;
@@ -59,166 +58,206 @@
             font-weight: bold;
         }
 
-        .nav-back {
-            align-self: flex-start;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .layout-container {
-            display: flex;
-            gap: 20px;
-            max-width: 1100px;
-            width: 100%;
-            margin-top: 15px;
-        }
-
-        .game-col {
-            flex: 1.2;
+        /* 3-Column Layout Matching the Screenshot */
+        .left-panel {
+            flex: 1;
+            background: radial-gradient(circle, #2575fc 0%, #1a252f 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            padding-top: 20px;
+            border-right: 4px solid #444;
+            position: relative;
         }
 
-        .sidebar-col {
-            flex: 1;
+        .center-panel {
+            flex: 1.5;
+            background: #000000;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            border-right: 4px solid #444;
         }
 
-        .score-container {
-            font-size: 2.2rem;
+        .right-panel {
+            flex: 1.2;
+            background: #2c3e50;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Left Side: Cookie Zone */
+        .bakery-title {
+            font-size: 1.2rem;
             font-weight: bold;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 10px 30px;
-            border-radius: 50px;
-            margin: 10px 0;
-            border: 1px solid #333;
+            text-shadow: 2px 2px black;
+            margin-bottom: 5px;
+        }
+
+        .score-display {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-shadow: 2px 2px black;
+        }
+
+        .cps-display {
+            font-size: 1rem;
+            color: #ccc;
+            text-shadow: 1px 1px black;
+            margin-bottom: 20px;
         }
 
         .cookie-wrapper {
             position: relative;
-            width: 300px;
-            height: 300px;
-            margin: 15px 0;
+            width: 250px;
+            height: 250px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .cookie {
-            font-size: 130px;
+            font-size: 160px;
             cursor: pointer;
-            display: inline-block;
-            filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.6));
             transition: transform 0.05s ease;
             z-index: 10;
         }
 
         .shake { animation: cookieShake 0.12s ease-in-out; }
         @keyframes cookieShake {
-            0% { transform: scale(0.95) rotate(0deg); }
-            50% { transform: scale(0.95) rotate(4deg); }
-            100% { transform: scale(0.95) rotate(0deg); }
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1.05); }
         }
 
-        /* Floating Ring Cursor Items */
         .visual-cursor {
             position: absolute;
             font-size: 24px;
             pointer-events: none;
             z-index: 5;
-            transition: transform 0.1s linear;
         }
 
-        .panel {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            padding: 15px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: left;
+        /* Center Side: News & Leaderboard */
+        .news-ticker {
+            background: #111;
+            border-bottom: 2px solid #444;
+            padding: 10px;
+            font-size: 0.9rem;
+            color: #f1c40f;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .center-content {
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
         }
 
         .panel-title {
-            margin: 0 0 10px 0;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 5px;
             color: #e67e22;
+            border-bottom: 2px solid #e67e22;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
         }
-
-        .shop-list { display: flex; flex-direction: column; gap: 10px; }
-        .shop-item {
-            background-color: rgba(0, 0, 0, 0.5);
-            border: 1px solid #333;
-            border-radius: 10px;
-            padding: 8px 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            overflow: hidden;
-            min-height: 70px;
-            z-index: 1;
-        }
-        
-        .shop-item::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 0;
-        }
-
-        .item-info {
-            position: relative;
-            z-index: 1;
-            text-align: left;
-        }
-        .item-info h4 { margin: 0; font-size: 0.95rem; text-shadow: 1px 1px 2px #000; }
-        .item-info p { margin: 2px 0 0 0; font-size: 0.75rem; color: #ccc; text-shadow: 1px 1px 2px #000; }
-
-        .buy-btn {
-            background-color: #e67e22;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            position: relative;
-            z-index: 1;
-        }
-        .buy-btn:disabled { background-color: #444; color: #888; cursor: not-allowed; }
 
         .leaderboard-entry {
             display: flex;
             justify-content: space-between;
-            padding: 6px 8px;
-            border-radius: 6px;
-            margin-bottom: 4px;
-            font-size: 0.9rem;
-            background: rgba(0,0,0,0.2);
+            padding: 8px;
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 5px;
+            border-radius: 4px;
         }
         .leaderboard-entry.self {
             border: 1px solid #e67e22;
-            background: rgba(230, 126, 34, 0.15);
+            background: rgba(230, 126, 34, 0.2);
         }
 
+        /* Right Side: Store Panel */
+        .store-header {
+            background: #111;
+            padding: 10px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 2px solid #444;
+        }
+
+        .upgrades-row {
+            display: flex;
+            gap: 5px;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 2px solid #444;
+            overflow-x: auto;
+        }
+
+        .upgrade-icon-btn {
+            width: 50px;
+            height: 50px;
+            background: #e67e22;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .upgrade-icon-btn:disabled {
+            background: #555;
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .shop-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .shop-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #444;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            min-height: 60px;
+        }
+        .shop-item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+        }
+
+        .item-info {
+            position: relative;
+            z-index: 2;
+        }
+        .item-info h4 { margin: 0; font-size: 1rem; }
+        .item-info p { margin: 2px 0 0 0; font-size: 0.75rem; color: #aaa; }
+
+        .buy-btn {
+            background: #e67e22;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+        .buy-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
+
+        /* General Animations */
         .floating-text {
             position: absolute;
             color: #f1c40f;
@@ -236,109 +275,122 @@
         }
         @keyframes burst { 0% { opacity: 1; } 100% { transform: translate(var(--x), var(--y)); opacity: 0; } }
 
-        @media (max-width: 768px) {
-            .layout-container { flex-direction: column; }
+        .nav-back {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            z-index: 100;
         }
     </style>
 </head>
 <body>
 
+    <!-- Login Overlay -->
     <div id="login-overlay">
         <div class="login-box">
             <h2>Enter Your Name</h2>
-            <p>Claim your spot on the live global arcade leaderboard!</p>
+            <p>Join the server leaderboard!</p>
             <input type="text" id="username-input" placeholder="Username..." maxlength="12">
             <br>
             <button id="start-game-btn">Play Game</button>
         </div>
     </div>
 
-    <a href="index.html" class="nav-back">⬅ Home</a>
+    <!-- LEFT PANEL: Cookie Clicking Zone -->
+    <div class="left-panel">
+        <div class="bakery-title"><span id="bakery-name">Nigel</span>'s Bakery</div>
+        <div class="score-display"><span id="score">0</span> cookies</div>
+        <div class="cps-display">per second: <span id="cps-rate">0</span></div>
 
-    <h2 style="margin: 10px 0 0 0; color:#bdc3c7;">Nigel's Epic Engine</h2>
-    <div style="font-size:0.9rem; color:#888;">CPS: <span id="cps-rate">0</span></div>
-    
-    <div class="score-container"><span id="score">0</span> Cookies</div>
-
-    <div class="layout-container">
-        
-        <div class="game-col">
-            <div class="cookie-wrapper" id="cookie-area">
-                <div class="cookie" id="cookie-btn">🍪</div>
-            </div>
+        <div class="cookie-wrapper" id="cookie-area">
+            <div class="cookie" id="cookie-btn">🍪</div>
         </div>
 
-        <div class="sidebar-col">
-            
-            <div class="panel">
-                <div class="panel-title">🏆 Shared Leaderboard</div>
-                <div id="leaderboard-list">
-                    <div style="color:#777; font-size:0.85rem;">Connecting to global data servers...</div>
+        <a href="index.html" class="nav-back">⬅ Menu</a>
+    </div>
+
+    <!-- CENTER PANEL: News ticker & Live Leaderboard -->
+    <div class="center-panel">
+        <div class="news-ticker" id="news-text">News: Loading today's flavor forecasts...</div>
+        <div class="center-content">
+            <div class="panel-title">🏆 Shared Leaderboard</div>
+            <div id="leaderboard-list">
+                <div style="color:#777;">Connecting to database server...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL: Upgrades and Store -->
+    <div class="right-panel">
+        <div class="store-header">Store</div>
+        
+        <!-- Cookie Clicking Multiplier Upgrades Panel -->
+        <div class="upgrades-row">
+            <button class="upgrade-icon-btn" id="upg-c1" title="Reinforced Fingers (Cost: 100) - Doubles manual click power" disabled>☝️</button>
+            <button class="upgrade-icon-btn" id="upg-c2" title="Carpal Tunnel Prevention (Cost: 1,000) - Manual clicks do +5 cookies" disabled>🦾</button>
+            <button class="upgrade-icon-btn" id="upg-c3" title="Epic Click Macro (Cost: 10,000) - Manual clicks do +50 cookies" disabled>⚡</button>
+        </div>
+
+        <div class="shop-list">
+            <div class="shop-item" style="background-image: url('https://unsplash.com')">
+                <div class="item-info">
+                    <h4>Cursor (<span id="count-t1">0</span>)</h4>
+                    <p>+2 CPS • Macro Clicking Hand</p>
                 </div>
+                <button class="buy-btn" id="btn-t1" disabled>Cost: 15</button>
             </div>
 
-            <div class="panel">
-                <div class="panel-title">🛒 Production Shop</div>
-                <div class="shop-list">
-                    
-                    <div class="shop-item" style="background-image: url('https://unsplash.com')">
-                        <div class="item-info">
-                            <h4>Cursor clicker (<span id="count-t1">0</span>)</h4>
-                            <p>+2 CPS • Macro Clicking Hand</p>
-                        </div>
-                        <button class="buy-btn" id="btn-t1" disabled>Cost: 15</button>
-                    </div>
+            <div class="shop-item" style="background-image: url('https://unsplash.com')">
+                <div class="item-info">
+                    <h4>Grandma (<span id="count-t2">0</span>)</h4>
+                    <p>+10 CPS • Baked with love</p>
+                </div>
+                <button class="buy-btn" id="btn-t2" disabled>Cost: 100</button>
+            </div>
 
-                    <div class="shop-item" style="background-image: url('https://unsplash.com')">
-                        <div class="item-info">
-                            <h4>Factory Worker (<span id="count-t2">0</span>)</h4>
-                            <p>+10 CPS • Factory labor</p>
-                        </div>
-                        <button class="buy-btn" id="btn-t2" disabled>Cost: 100</button>
-                    </div>
-
-                    <div class="shop-item" style="background-image: url('https://unsplash.com')">
-                        <div class="item-info">
-                            <h4>Business Executive (<span id="count-t3">0</span>)</h4>
-                    <p>+50 CPS • Corporate optimization</p>
+            <div class="shop-item" style="background-image: url('https://unsplash.com')">
+                <div class="item-info">
+                    <h4>Farm (<span id="count-t3">0</span>)</h4>
+                    <p>+50 CPS • Growing cookie plants</p>
                 </div>
                 <button class="buy-btn" id="btn-t3" disabled>Cost: 500</button>
             </div>
 
             <div class="shop-item" style="background-image: url('https://unsplash.com')">
                 <div class="item-info">
-                    <h4>AI Supercomputer (<span id="count-t4">0</span>)</h4>
-                    <p>+250 CPS • Deep learning neural recipes</p>
+                    <h4>Mine (<span id="count-t4">0</span>)</h4>
+                    <p>+250 CPS • Deep Earth dough mines</p>
                 </div>
                 <button class="buy-btn" id="btn-t4" disabled>Cost: 3,000</button>
             </div>
 
-                                <!-- Tier 5: Quantum Matrix -->
-                    <div class="shop-item" style="background-image: url('https://unsplash.com')">
-                        <div class="item-info">
-                            <h4>Quantum Matrix (<span id="count-t5">0</span>)</h4>
-                            <p>+1,200 CPS • Multi-dimensional dough</p>
-                        </div>
-                        <button class="buy-btn" id="btn-t5" disabled>Cost: 20,000</button>
-                    </div>
-
-                    <!-- Tier 6: Reality Glitcher -->
-                    <div class="shop-item" style="background-image: url('https://unsplash.com')">
-                        <div class="item-info">
-                            <h4>Reality Glitcher (<span id="count-t6">0</span>)</h4>
-                            <p>+8,000 CPS • Commands simulation rules</p>
-                        </div>
-                        <button class="buy-btn" id="btn-t6" disabled>Cost: 150,000</button>
-                    </div>
-
+            <div class="shop-item" style="background-image: url('https://unsplash.com')">
+                <div class="item-info">
+                    <h4>Factory (<span id="count-t5">0</span>)</h4>
+                    <p>+1,200 CPS • Industrial automation</p>
                 </div>
+                <button class="buy-btn" id="btn-t5" disabled>Cost: 20,000</button>
             </div>
 
+            <div class="shop-item" style="background-image: url('https://unsplash.com')">
+                <div class="item-info">
+                    <h4>Reality Glitcher (<span id="count-t6">0</span>)</h4>
+                    <p>+8,000 CPS • Bends engine rules</p>
+                </div>
+                <button class="buy-btn" id="btn-t6" disabled>Cost: 150,000</button>
+            </div>
         </div>
     </div>
 
     <script>
         let score = 0;
+        let clickPower = 1;
         let myUsername = "Anonymous";
         let cursorAngleOffset = 0;
         const spawnedCursorsArray = [];
@@ -350,6 +402,17 @@
             t5: { count: 0, cost: 20000, baseCost: 20000, cps: 1200 },
             t6: { count: 0, cost: 150000, baseCost: 150000, cps: 8000 }
         };
+        const clickUpgrades = {
+            c1: { cost: 100, purchased: false, effect: () => { clickPower *= 2; } },
+            c2: { cost: 1000, purchased: false, effect: () => { clickPower += 5; } },
+            c3: { cost: 10000, purchased: false, effect: () => { clickPower += 50; } }
+        };
+        const newsFlabs = [
+            "News: Cookies tested on giraffes, found to have no ill effects.",
+            "News: New cookie formula taking classroom by storm!",
+            "News: High cookie production suspected of messing with space-time continuum.",
+            "News: Grandmas claim they are browning biscuits at record speed."
+        ];
         const scoreDisplay = document.getElementById('score');
         const cpsDisplay = document.getElementById('cps-rate');
         const cookieBtn = document.getElementById('cookie-btn');
@@ -358,18 +421,19 @@
             const val = document.getElementById('username-input').value.trim();
             if(val !== "") {
                 myUsername = val;
+                document.getElementById('bakery-name').textContent = myUsername;
                 document.getElementById('login-overlay').style.display = 'none';
                 initCloudSync();
             }
         });
         function triggerCookiePress(e) {
             if(e) e.preventDefault();
-            score++;
+            score += clickPower;
             updateDisplay();
             cookieBtn.classList.remove('shake');
             void cookieBtn.offsetWidth;
             cookieBtn.classList.add('shake');
-            createFloatingText();
+            createFloatingText("+" + clickPower);
             createCrumbs();
         }
         cookieBtn.addEventListener('touchstart', triggerCookiePress, { passive: false });
@@ -377,6 +441,7 @@
             if (e.type === 'mousedown' && 'ontouchstart' in window) return;
             triggerCookiePress(e);
         });
+        // Shop Purchase Systems
         Object.keys(upgrades).forEach(function(key) {
             const item = upgrades[key];
             document.getElementById('btn-' + key).addEventListener('click', function() {
@@ -385,13 +450,24 @@
                     item.count++;
                     item.cost = Math.round(item.baseCost * Math.pow(1.5, item.count));
                     updateDisplay();
-                    if (key === 't1') {
-                        spawnVisualCursorElement();
-                    }
+                    if (key === 't1') spawnVisualCursorElement();
                 }
             });
         });
-                // Physical Cursor Spawning Mechanics Fixed
+        // Click Power Upgrades Systems
+        Object.keys(clickUpgrades).forEach(function(key) {
+            const upg = clickUpgrades[key];
+            document.getElementById('upg-' + key).addEventListener('click', function() {
+                if (score >= upg.cost && !upg.purchased) {
+                    score -= upg.cost;
+                    upg.purchased = true;
+                    upg.effect();
+                    this.style.background = '#2ecc71';
+                    this.disabled = true;
+                    updateDisplay();
+                }
+            });
+        });
         function spawnVisualCursorElement() {
             const cursorEl = document.createElement('div');
             cursorEl.className = 'visual-cursor';
@@ -400,20 +476,18 @@
             spawnedCursorsArray.push(cursorEl);
             arrangeCursorsInCircle();
         }
-
         function arrangeCursorsInCircle() {
-            const radius = 105;
+            const radius = 95;
             const total = spawnedCursorsArray.length;
             spawnedCursorsArray.forEach(function(el, index) {
                 const angle = (index / total) * 2 * Math.PI + cursorAngleOffset;
-                const x = 150 + radius * Math.cos(angle) - 12;
-                const y = 150 + radius * Math.sin(angle) - 12;
+                const x = 125 + radius * Math.cos(angle) - 12;
+                const y = 125 + radius * Math.sin(angle) - 12;
                 el.style.left = x + 'px';
                 el.style.top = y + 'px';
                 el.style.transform = 'rotate(' + (angle + Math.PI / 2) + 'rad)';
             });
         }
-        // Spin the cursors ring smoothly over time
         setInterval(function() {
             if (spawnedCursorsArray.length > 0) {
                 cursorAngleOffset += 0.02;
@@ -428,22 +502,34 @@
                 updateDisplay();
             }
         }, 1000);
+        // News Feed Engine
+        setInterval(function() {
+            const randNews = newsFlabs[Math.floor(Math.random() * newsFlabs.length)];
+            document.getElementById('news-text').textContent = randNews;
+        }, 8000);
         function updateDisplay() {
-            scoreDisplay.textContent = Math.floor(score);
+            scoreDisplay.textContent = Math.floor(score).toLocaleString();
             let currentCps = 0;
             Object.keys(upgrades).forEach(function(k) {
                 currentCps += upgrades[k].count * upgrades[k].cps;
                 const btn = document.getElementById('btn-' + k);
                 document.getElementById('count-' + k).textContent = upgrades[k].count;
-                btn.textContent = 'Cost: ' + upgrades[k].cost;
+                btn.textContent = 'Cost: ' + upgrades[k].cost.toLocaleString();
                 btn.disabled = score < upgrades[k].cost;
             });
-            cpsDisplay.textContent = currentCps;
+            cpsDisplay.textContent = currentCps.toLocaleString();
+            Object.keys(clickUpgrades).forEach(function(key) {
+                const upg = clickUpgrades[key];
+                const upgBtn = document.getElementById('upg-' + key);
+                if (!upg.purchased) {
+                    upgBtn.disabled = score < upg.cost;
+                }
+            });
         }
-        function createFloatingText() {
+        function createFloatingText(txt) {
             const text = document.createElement('div');
             text.classList.add('floating-text');
-            text.textContent = '+1';
+            text.textContent = txt;
             text.style.left = 'calc(50% - 10px)';
             text.style.top = '70px';
             cookieArea.appendChild(text);
@@ -451,60 +537,60 @@
         }
         function createCrumbs() {
             for (let i = 0; i < 4; i++) {
-                const crumb = document.createElement('div');
-                crumb.classList.add('crumb');
-                crumb.textContent = '•';
-                const randomX = (Math.random() - 0.5) * 160;
-                const randomY = (Math.random() * 100) + 50;
-                const duration = (Math.random() * 0.3) + 0.4;
-                crumb.style.setProperty('--x', randomX + 'px');
-                crumb.style.setProperty('--y', randomY + 'px');
-                crumb.style.setProperty('--duration', duration + 's');
-                crumb.style.left = '50%';
-                crumb.style.top = '50%';
-                cookieArea.appendChild(crumb);
-                setTimeout(function() { crumb.remove(); }, duration * 1000);
-            }
+        const crumb = document.createElement('div');
+        crumb.classList.add('crumb');
+        crumb.textContent = '•';
+        const randomX = (Math.random() - 0.5) * 160;
+        const randomY = (Math.random() * 100) + 50;
+        const duration = (Math.random() * 0.3) + 0.4;
+        crumb.style.setProperty('--x', randomX + 'px');
+        crumb.style.setProperty('--y', randomY + 'px');
+        crumb.style.setProperty('--duration', duration + 's');
+        crumb.style.left = '50%';
+        crumb.style.top = '50%';
+        cookieArea.appendChild(crumb);
+        setTimeout(function() { crumb.remove(); }, duration * 1000);
+    }
+}
+
+async function initCloudSync() {
+    setInterval(syncLeaderboard, 6000);
+    syncLeaderboard();
+}
+
+async function syncLeaderboard() {
+    try {
+        const res = await fetch('https://jsonbin.io', {
+            headers: { 'X-Master-Key': '$2a$10$R9nE.pPz3v9x8D.K82u0O.o9Xh1Dym4P6c9zZ29LhA/1V3uU3WcK.' }
+        });
+        const data = await res.json();
+        let scores = data.record.scores || [];
+        const playerIndex = scores.findIndex(function(u) { return u.name.toLowerCase() === myUsername.toLowerCase(); });
+        if (playerIndex !== -1) {
+            if (score > scores[playerIndex].score) scores[playerIndex].score = Math.floor(score);
+        } else {
+            scores.push({ name: myUsername, score: Math.floor(score) });
         }
-        async function initCloudSync() {
-            setInterval(syncLeaderboard, 6000);
-            syncLeaderboard();
-        }
-        async function syncLeaderboard() {
-            try {
-                const res = await fetch('https://jsonbin.io', {
-                    headers: { 'X-Master-Key': '$2a$10$R9nE.pPz3v9x8D.K82u0O.o9Xh1Dym4P6c9zZ29LhA/1V3uU3WcK.' }
-                });
-                const data = await res.json();
-                let scores = data.record.scores || [];
-                const playerIndex = scores.findIndex(function(u) { return u.name.toLowerCase() === myUsername.toLowerCase(); });
-                if (playerIndex !== -1) {
-                    if (score > scores[playerIndex].score) scores[playerIndex].score = Math.floor(score);
-                } else {
-                    scores.push({ name: myUsername, score: Math.floor(score) });
-                }
-                scores.sort(function(a, b) { return b.score - a.score; });
-                scores = scores.slice(0, 7);
-                const container = document.getElementById('leaderboard-list');
-                container.innerHTML = '';
-                scores.forEach(function(entry, idx) {
-                    const row = document.createElement('div');
-                    row.className = 'leaderboard-entry ' + (entry.name.toLowerCase() === myUsername.toLowerCase() ? 'self' : '');
-                    row.innerHTML = '#' + (idx + 1) + ' ' + entry.name + ' ' + entry.score.toLocaleString() + ' 🍪';
-                    container.appendChild(row);
-                });
-                await fetch('https://jsonbin.io', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': '$2a$10$R9nE.pPz3v9x8D.K82u0O.o9Xh1Dym4P6c9zZ29LhA/1V3uU3WcK.'
-                    },
-                    body: JSON.stringify({ scores: scores })
-                });
-            } catch (err) {
-                console.log("Leaderboard sync skipped.");
-            }
-        }
-    </script>
-</body>
-</html>
+        scores.sort(function(a, b) { return b.score - a.score; });
+        scores = scores.slice(0, 7);
+        const container = document.getElementById('leaderboard-list');
+        container.innerHTML = '';
+        scores.forEach(function(entry, idx) {
+            const row = document.createElement('div');
+            row.className = 'leaderboard-entry ' + (entry.name.toLowerCase() === myUsername.toLowerCase() ? 'self' : '');
+            row.innerHTML = '#' + (idx + 1) + ' ' + entry.name + ' ' + entry.score.toLocaleString() + ' 🍪';
+            container.appendChild(row);
+        });
+        await fetch('https://jsonbin.io', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': '$2a$10$R9nE.pPz3v9x8D.K82u0O.o9Xh1Dym4P6c9zZ29LhA/1V3uU3WcK.'
+            },
+            body: JSON.stringify({ scores: scores })
+        });
+    } catch (err) {
+        console.log("Leaderboard sync skipped.");
+    }
+}
+updateDisplay();
