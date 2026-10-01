@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cookie Clicker - Unique Edition</title>
-    <!-- Pulling bold Nunito Font from Google Fonts to match your homepage -->
+    <title>Popcorn Clicker - Classic Edition</title>
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
     <link href="https://googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
@@ -12,7 +11,7 @@
     <style>
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: #0f172a; /* Premium Dark Navy */
+            background-color: #0f172a;
             color: #f8fafc;
             margin: 0;
             padding: 20px;
@@ -38,7 +37,7 @@
             font-size: 3rem;
             font-weight: 900;
             margin: 0;
-            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            background: linear-gradient(to right, #f1c40f, #f39c12);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -53,7 +52,7 @@
         /* MAIN GAME GRID LAYOUT */
         .game-grid {
             display: grid;
-            grid-template-columns: 1fr 1.5fr 1fr; /* Store Left, Cookie Center, Upgrades Right */
+            grid-template-columns: 1fr 1.5fr 1fr;
             gap: 20px;
             width: 100%;
             max-width: 1300px;
@@ -61,7 +60,6 @@
             height: calc(100vh - 180px);
         }
 
-        /* Panel Bases */
         .panel {
             background: #1e293b;
             border: 2px solid #334155;
@@ -77,14 +75,14 @@
             font-size: 1.2rem;
             font-weight: 900;
             text-transform: uppercase;
-            color: #ff7e5f;
+            color: #f1c40f;
             border-bottom: 2px solid #334155;
             padding-bottom: 8px;
             margin-bottom: 12px;
             text-align: center;
         }
 
-        /* 2. THE DEAD CENTER: ENLARGED COOKIE ZONE */
+        /* 2. CENTER PANEL: THE KERNEL MATRIX */
         .center-panel {
             background: transparent;
             border: none;
@@ -95,7 +93,7 @@
             position: relative;
         }
 
-        .cookie-wrapper {
+        .popcorn-wrapper {
             position: relative;
             width: 340px;
             height: 340px;
@@ -104,35 +102,22 @@
             justify-content: center;
         }
 
-        .cookie-img-btn {
-            width: 300px; /* Massive oversized cookie dimension */
-            height: 300px;
+        .popcorn-img-btn {
+            font-size: 180px; /* Big interactive emoji fallback */
             cursor: pointer;
             transition: transform 0.05s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
-            background-image: url('cookie-pic.png?v=3'); /* Uses your transparent asset */
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
             border: none;
             background-color: transparent;
             outline: none;
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Dynamic click burst feedback scale */
-        .cookie-img-btn:active {
-            transform: scale(0.92);
+        .popcorn-img-btn:active {
+            transform: scale(0.90);
         }
 
-        .visual-cursor {
-            position: absolute;
-            font-size: 24px;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        /* LEFT SIDEBAR: ASSET PURCHASING STORE */
+        /* LEFT SIDEBAR: POPPING UPGRADES */
         .shop-list {
             display: flex;
             flex-direction: column;
@@ -154,17 +139,17 @@
         .item-info p { margin: 2px 0 0 0; font-size: 0.75rem; color: #94a3b8; }
 
         .buy-btn {
-            background: #ff7e5f;
-            color: white;
+            background: #f1c40f;
+            color: #0f172a;
             border: none;
             padding: 6px 12px;
-            font-weight: 700;
+            font-weight: 900;
             border-radius: 6px;
             cursor: pointer;
         }
         .buy-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
 
-        /* RIGHT SIDEBAR: CLICK POWER MODIFIERS */
+        /* RIGHT SIDEBAR: FLAVOUR BOOSTERS */
         .upgrade-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -189,7 +174,7 @@
         .upgrade-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #1e293b; }
         .upgrade-btn.bought { border-color: #2ecc71; background: rgba(46, 204, 113, 0.1); }
 
-        /* ADVANCED INTEGRATED HOVER TOOLTIPS */
+        /* HOVER TOOLTIPS */
         .tooltip-text {
             visibility: hidden;
             position: absolute;
@@ -198,7 +183,7 @@
             background-color: #1e293b;
             color: #fff;
             text-align: left;
-            border: 2px solid #ff7e5f;
+            border: 2px solid #f1c40f;
             border-radius: 8px;
             padding: 10px;
             font-size: 0.8rem;
@@ -214,18 +199,33 @@
             opacity: 1;
         }
 
-        /* PARTICLES & FLOATING ANIMS */
+        /* FLYING POPCORN ANIMATIONS */
         .floating-text {
-            position: absolute; color: #feb47b; font-size: 1.8rem; font-weight: 900;
+            position: absolute; color: #f1c40f; font-size: 1.8rem; font-weight: 900;
             pointer-events: none; animation: floatUp 0.6s ease-out forwards; z-index: 20;
         }
         @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-80px); } }
 
-        .crumb {
-            position: absolute; color: #ff7e5f; font-size: 20px; pointer-events: none; z-index: 15;
-            animation: burst var(--duration) linear forwards;
+        .popcorn-particle {
+            position: absolute;
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 15;
+            animation: popOut var(--duration) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
-        @keyframes burst { 0% { opacity: 1; } 100% { transform: translate(var(--x), var(--y)); opacity: 0; } }
+        @keyframes popOut {
+            0% {
+                transform: translate(0, 0) scale(0.5) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(1.2) rotate(var(--r));
+                opacity: 0;
+            }
+        }
 
         .nav-back {
             position: fixed; bottom: 20px; left: 20px; background: #1e293b;
@@ -233,7 +233,6 @@
             font-weight: 700; border: 2px solid #334155; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        /* Responsive Settings */
         @media (max-width: 1000px) {
             .game-grid { grid-template-columns: 1fr; overflow-y: auto; height: auto; }
             body { overflow-y: auto; }
@@ -242,84 +241,83 @@
 </head>
 <body>
 
-    <!-- 1. TOP SCORE PANEL -->
+    <!-- TOP SCORE PANEL -->
     <div class="top-score-panel">
-        <h1 class="score-display"><span id="score">0</span> cookies</h1>
-        <div class="cps-display">per second: <span id="cps-rate">0</span></div>
+        <h1 class="score-display"><span id="score">0</span> popped</h1>
+        <div class="cps-display">PPS (Popped Per Second): <span id="cps-rate">0</span></div>
     </div>
 
-    <!-- MAIN GAME LAYOUT WORKSPACE -->
+    <!-- MAIN GAME LAYOUT -->
     <div class="game-grid">
         
         <!-- LEFT: PRODUCTION SHOP PANEL -->
         <div class="panel">
-            <div class="panel-title">Production Assets</div>
+            <div class="panel-title">Popping Machinery</div>
             <div class="shop-list">
                 
                 <div class="shop-item">
-                    <span class="tooltip-text"><b>Cursor clicker</b><br>Generates +2 CPS.<br>Automatically presses the main cookie area.</span>
+                    <span class="tooltip-text"><b>Microwave Bag</b><br>Generates +2 PPS.<br>Standard movie night heating bag.</span>
                     <div class="item-info">
-                        <h4>Cursor (<span id="count-t1">0</span>)</h4>
-                        <p>+2 CPS</p>
+                        <h4>Microwave (<span id="count-t1">0</span>)</h4>
+                        <p>+2 PPS</p>
                     </div>
                     <button class="buy-btn" id="btn-t1" disabled>Cost: 15</button>
                 </div>
 
                 <div class="shop-item">
-                    <span class="tooltip-text"><b>Factory Worker</b><br>Generates +10 CPS.<br>Bakes cookies efficiently inside factory zones.</span>
+                    <span class="tooltip-text"><b>Hot Air Popper</b><br>Generates +10 PPS.<br>Blows steady hot air to crack kernels.</span>
                     <div class="item-info">
-                        <h4>Worker (<span id="count-t2">0</span>)</h4>
-                        <p>+10 CPS</p>
+                        <h4>Air Popper (<span id="count-t2">0</span>)</h4>
+                        <p>+10 PPS</p>
                     </div>
                     <button class="buy-btn" id="btn-t2" disabled>Cost: 100</button>
                 </div>
 
                 <div class="shop-item">
-                    <span class="tooltip-text"><b>Business Executive</b><br>Generates +50 CPS.<br>Optimizes corporate cookie yields.</span>
+                    <span class="tooltip-text"><b>Theater Machine</b><br>Generates +50 PPS.<br>Commercial scale kettle oil popper.</span>
                     <div class="item-info">
-                        <h4>Executive (<span id="count-t3">0</span>)</h4>
-                        <p>+50 CPS</p>
+                        <h4>Theater Cart (<span id="count-t3">0</span>)</h4>
+                        <p>+50 PPS</p>
                     </div>
                     <button class="buy-btn" id="btn-t3" disabled>Cost: 500</button>
                 </div>
 
                 <div class="shop-item">
-                    <span class="tooltip-text"><b>AI Supercomputer</b><br>Generates +250 CPS.<br>Calculates advanced recipe combinations.</span>
+                    <span class="tooltip-text"><b>Mega Stadium Factory</b><br>Generates +250 PPS.<br>Massive silos cooking kernels at hyper-sonic speeds.</span>
                     <div class="item-info">
-                        <h4>Supercomputer (<span id="count-t4">0</span>)</h4>
-                        <p>+250 CPS</p>
+                        <h4>Stadium Popper (<span id="count-t4">0</span>)</h4>
+                        <p>+250 PPS</p>
                     </div>
                     <button class="buy-btn" id="btn-t4" disabled>Cost: 3,000</button>
                 </div>
-
             </div>
         </div>
 
-        <!-- CENTER: COOKIE CONSOLE LAYER -->
+        <!-- CENTER PANEL: THE POPPING ZONE -->
         <div class="panel center-panel">
-            <div class="cookie-wrapper" id="cookie-area">
-                <button class="cookie-img-btn" id="cookie-btn"></button>
+            <div class="popcorn-wrapper" id="popcorn-area">
+                <button class="popcorn-img-btn" id="popcorn-btn">🍿</button>
             </div>
         </div>
 
-        <!-- RIGHT: UPGRADES & CLICK BOOSTERS -->
+        <!-- RIGHT PANEL: FLAVOUR SEASONING STORE -->
         <div class="panel">
-            <div class="panel-title">Click Boosters</div>
+            <div class="panel-title">Flavour Seasoning</div>
             <div class="upgrade-grid">
                 
                 <button class="upgrade-btn" id="upg-c1" disabled>
-                    ☝️ <span>Cost: 100</span>
-                    <span class="tooltip-text"><b>Reinforced Fingers</b><br>Doubles your manual click power permanently.</span>
+                    🧈 <span>Cost: 100</span>
+                    <span class="tooltip-text"><b>Melted Butter</b><br>Doubles your manual shake popping power permanently.</span>
                 </button>
 
                 <button class="upgrade-btn" id="upg-c2" disabled>
-                    🦾 <span>Cost: 1,000</span>
-                    <span class="tooltip-text"><b>Carpal Tunnel Relief</b><br>Adds a permanent flat +5 cookies to manual clicks.</span>
+                    🧂 <span>Cost: 1,000</span>
+                    <span class="tooltip-text"><b>Extra Fine Salt</b><br>Adds a permanent flat +5 popped items to manual clicks.</span>
                 </button>
 
                 <button class="upgrade-btn" id="upg-c3" disabled>
-                    ⚡ <span>Cost: 10,000</span>
-                    <span class="tooltip-text"><b>Epic Click Macro</b><br>Adds a massive permanent flat +50 cookies per click.</span>
+                    🧀 <span>Cost: 10,000</span>
+                    <span class="tooltip-text"><b>Cheddar Powder</b><br>Adds a massive permanent flat +50 popped items per click.</span>
                 </button>
 
             </div>
@@ -332,39 +330,38 @@
     <script>
         let score = 0;
         let clickPower = 1;
-        let cursorAngleOffset = 0;
-        const spawnedCursorsArray = [];
+
         const upgrades = {
             t1: { count: 0, cost: 15, baseCost: 15, cps: 2 },
             t2: { count: 0, cost: 100, baseCost: 100, cps: 10 },
             t3: { count: 0, cost: 500, baseCost: 500, cps: 50 },
             t4: { count: 0, cost: 3000, baseCost: 3000, cps: 250 }
         };
+
         const clickUpgrades = {
             c1: { cost: 100, purchased: false, effect: () => { clickPower *= 2; } },
             c2: { cost: 1000, purchased: false, effect: () => { clickPower += 5; } },
             c3: { cost: 10000, purchased: false, effect: () => { clickPower += 50; } }
         };
+
         const scoreDisplay = document.getElementById('score');
         const cpsDisplay = document.getElementById('cps-rate');
-        const cookieBtn = document.getElementById('cookie-btn');
-        const cookieArea = document.getElementById('cookie-area');
+        const popcornBtn = document.getElementById('popcorn-btn');
+        const popcornArea = document.getElementById('popcorn-area');
 
-        // Click Action Handling Engine
-        function handleCookiePress(e) {
+        function handlePopcornPress(e) {
             if(e) e.preventDefault();
             score += clickPower;
             updateDisplay();
             createFloatingText("+" + clickPower);
-            createCrumbs();
+            createPopcornParticles();
         }
-        cookieBtn.addEventListener('touchstart', handleCookiePress, { passive: false });
-        cookieBtn.addEventListener('mousedown', function(e) {
+        popcornBtn.addEventListener('touchstart', handlePopcornPress, { passive: false });
+        popcornBtn.addEventListener('mousedown', function(e) {
             if (e.type === 'mousedown' && 'ontouchstart' in window) return;
-            handleCookiePress(e);
+            handlePopcornPress(e);
         });
 
-        // Shop System Click Listeners Loop
         Object.keys(upgrades).forEach(function(key) {
             const item = upgrades[key];
             document.getElementById('btn-' + key).addEventListener('click', function() {
@@ -373,12 +370,10 @@
                     item.count++;
                     item.cost = Math.round(item.baseCost * Math.pow(1.5, item.count));
                     updateDisplay();
-                    if (key === 't1') spawnVisualCursorElement();
                 }
             });
         });
 
-        // Click Power Booster Triggers Loop
         Object.keys(clickUpgrades).forEach(function(key) {
             const upg = clickUpgrades[key];
             const upgBtn = document.getElementById('upg-' + key);
@@ -394,37 +389,7 @@
             });
         });
 
-        function spawnVisualCursorElement() {
-            const cursorEl = document.createElement('div');
-            cursorEl.className = 'visual-cursor';
-            cursorEl.textContent = '▲';
-            cookieArea.appendChild(cursorEl);
-            spawnedCursorsArray.push(cursorEl);
-            arrangeCursorsInCircle();
-        }
-
-        function arrangeCursorsInCircle() {
-            const radius = 165;
-            const total = spawnedCursorsArray.length;
-            spawnedCursorsArray.forEach(function(el, index) {
-                const angle = (index / total) * 2 * Math.PI + cursorAngleOffset;
-                const x = 170 + radius * Math.cos(angle) - 12;
-                const y = 170 + radius * Math.sin(angle) - 12;
-                el.style.left = x + 'px';
-                el.style.top = y + 'px';
-                el.style.transform = 'rotate(' + (angle + Math.PI / 2) + 'rad)';
-            });
-        }
-
-        // Spin the rings smoothly
-        setInterval(function() {
-            if (spawnedCursorsArray.length > 0) {
-                cursorAngleOffset += 0.02;
-                arrangeCursorsInCircle();
-            }
-        }, 30);
-
-        // Offline Payout Tick (Runs every 1s)
+        // 1-Second Automation Engine
         setInterval(function() {
             let totalCps = 0;
             Object.keys(upgrades).forEach(function(k) { totalCps += upgrades[k].count * upgrades[k].cps; });
@@ -445,6 +410,7 @@
                 btn.disabled = score < upgrades[k].cost;
             });
             cpsDisplay.textContent = totalCps.toLocaleString();
+
             Object.keys(clickUpgrades).forEach(function(key) {
                 const upg = clickUpgrades[key];
                 const upgBtn = document.getElementById('upg-' + key);
@@ -460,29 +426,34 @@
             text.textContent = txt;
             text.style.left = 'calc(50% - 15px)';
             text.style.top = '110px';
-            cookieArea.appendChild(text);
+            popcornArea.appendChild(text);
             setTimeout(function() { text.remove(); }, 600);
         }
 
-        function createCrumbs() {
-            for (let i = 0; i < 4; i++) {
-                const crumb = document.createElement('div');
-                crumb.classList.add('crumb');
-                crumb.textContent = '•';
-                const randomX = (Math.random() - 0.5) * 200;
-                const randomY = (Math.random() * 120) + 60;
-                const duration = (Math.random() * 0.3) + 0.4;
-                crumb.style.setProperty('--x', randomX + 'px');
-                crumb.style.setProperty('--y', randomY + 'px');
-                crumb.style.setProperty('--duration', duration + 's');
-                crumb.style.left = '50%';
-                crumb.style.top = '50%';
-                cookieArea.appendChild(crumb);
-                setTimeout(function() { crumb.remove(); }, duration * 1000);
+        // FLYING CORN PARTICLES CONTROLLER
+        function createPopcornParticles() {
+            for (let i = 0; i < 6; i++) {
+                const flake = document.createElement('div');
+                flake.classList.add('popcorn-particle');
+                flake.textContent = Math.random() > 0.4 ? '🍿' : '🍿';
+                
+                const randomX = (Math.random() - 0.5) * 350; 
+                const randomY = (Math.random() - 0.7) * 300; 
+                const randomRot = (Math.random() * 360);
+                const duration = (Math.random() * 0.4) + 0.5;
+
+                flake.style.setProperty('--x', randomX + 'px');
+                flake.style.setProperty('--y', randomY + 'px');
+                flake.style.setProperty('--r', randomRot + 'deg');
+                flake.style.setProperty('--duration', duration + 's');
+                
+                flake.style.left = 'calc(50% - 15px)';
+                flake.style.top = 'calc(50% - 15px)';
+
+                popcornArea.appendChild(flake);
+                setTimeout(function() { flake.remove(); }, duration * 1000);
             }
         }
-
-        // Initialize display configuration on launch
         updateDisplay();
     </script>
 </body>
